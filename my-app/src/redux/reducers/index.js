@@ -1,4 +1,10 @@
-import {combineReducers} from 'redux';
-import btnClicks from '../reducers/initial';
+import { combineReducers } from "redux";
+import { firebaseReducer } from "react-redux-firebase";
+import { firestoreReducer } from "redux-firestore";
+import auth from "./authReducer";
 
-export default combineReducers({btnClicks});
+export default combineReducers({
+  auth,
+  firestore: firestoreReducer,
+  firebase: firebaseReducer,
+});
