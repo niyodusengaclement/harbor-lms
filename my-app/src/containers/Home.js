@@ -1,11 +1,29 @@
 import React from "react";
 import WelcomeMessage from "../components/Welcome";
+import { Button } from "react-bootstrap";
+import { connect } from "react-redux";
+import { countClicks } from "../redux/actions";
 
-const Home = () => {
+const Home = (props) => {
+  const handleClick = () => {
+    props.countClicks();
+  };
   return (
     <div>
-      <WelcomeMessage/>
+      <WelcomeMessage />
+      <Button onClick={handleClick}>Click me</Button>
+      redux global state:{JSON.stringify(props.globalState)}
     </div>
   );
 };
-export default Home;
+
+const mapStateToProps = (globalState) => {
+  return {
+    globalState,
+  };
+};
+const mapDispatchToProps = {
+  countClicks,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
