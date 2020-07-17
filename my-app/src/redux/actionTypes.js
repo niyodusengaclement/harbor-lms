@@ -1,2 +1,0 @@
-export const COUNT_CLICKS = "COUNT_CLICKS";
-export const GET_COURSES_SUCCESS = "GET_COURSES_SUCCESS";

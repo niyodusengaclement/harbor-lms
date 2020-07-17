@@ -18,7 +18,7 @@ const Sidebar = (props) => {
 						{/* We will retrieve all the info in db according to the user */}
 						<div className="companyImg">
 							<div className="photo">
-								<img alt="" src={userInfo.schoolLogo !== null ? userInfo.schoolLogo : schoolImg}/>
+								<img alt="" className="avatar rounded-circle" src={userInfo.schoolLogo !== null ? userInfo.schoolLogo : schoolImg}/>
 							</div>
 							<span className="">{userInfo.schoolName} </span>
 						</div>
@@ -40,14 +40,14 @@ const Sidebar = (props) => {
                 <div className="left-sidebar-footer-block">
                   <div className="left-sidebar-footer-block-left">
 										{/* We will retrieve all the info in db according to the user */}
-                    <img className="avatar rounded-circle" alt="profile" src={userInfo.schoolLogo !== null ? userInfo.imageUrl : userGrey}/>
+                    <img className="avatar rounded-circle" alt="profile" src={userInfo.imageUrl !== null ? userInfo.imageUrl : userGrey}/>
                   </div>
                   <div className="left-sidebar-footer-block-info">
-                    <strong className="left-sidebar-footer-block-info-name">{userInfo.name}</strong>
+                    <strong className="left-sidebar-footer-block-info-name">{ userInfo.name.length < 9 ? userInfo.name.substr(0, 9) : `${userInfo.name.substr(0, 7)}...`} </strong>
                     <p className="left-sidebar-footer-block-info-role">{userInfo.role}</p>
                   </div>
                   <div className="left-sidebar-footer-block-right">
-                    <img  alt="" src={userInfo.imageUrl !== null ? userInfo.imageUrl : Indent50}/>
+                    <img  alt="" src={Indent50}/>
                   </div>
                 </div>
               </div>

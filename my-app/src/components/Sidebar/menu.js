@@ -7,11 +7,6 @@ export const instructor = [
     icon: faTachometerAlt,
   },
   {
-    name: 'Courses',
-    url: '/courses',
-    icon: faBook,
-  },
-  {
     name: 'Profile',
     url: '/profile',
     icon: faUserCircle,
