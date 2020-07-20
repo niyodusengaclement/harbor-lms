@@ -90,9 +90,9 @@ const Signup =(props) => {
                     <AlertComponent isSuccess={successMsg ? true : false } message={successMsg}/>
                     <div className="signup--form--title">
                         <Text label="Registration" className="txt txt--fontSize__large" />
-                        <Text linkLabel="Instructor" linkAddress="#/instructor" className="txt txt--fontSize__medium" location={props.location} />
+                        <Text linkLabel="Instructor" linkAddress="/signup/instructor" className="txt txt--fontSize__medium" linkActiveStatus={true} />
                         <Text label="|" className="txt" />
-                        <Text linkLabel="Student" linkAddress="#/student" className="txt txt--fontSize__medium" location={props.location} />
+                        <Text linkLabel="Student" linkAddress="/signup/student" className="txt txt--fontSize__medium" location={props.location} />
                     </div>
                     <div className="signup--form--rows">
                         <div className="signup--form--row">
@@ -124,7 +124,7 @@ const Signup =(props) => {
                             <Button name="Register" label="Register" handleClick={handleClick}/>   
                         </div>
                         <div className="signup--form--footer"> 
-                            <Text label="Already have an account ? Sign in " linkLabel="here" linkAddress="/login" className="txt" />
+                            <Text label="Already have an account ? Sign in " linkLabel="here" linkAddress="/login" className="txt" exception={true} />
                     </div>
                     </div>
                 </div>
