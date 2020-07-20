@@ -6,7 +6,7 @@
     color: white;
 
     >a {
-        color: $color-secondary;
+        color: white;
         &:hover{
             font-weight: bold;
         }
@@ -14,7 +14,11 @@
             font-weight: normal;
         }
         &[clicked]{
+            color: $color-secondary;
             font-weight: bold;
+        }
+        &[exception]{
+            color: $color-secondary;
         }
     }
 }
