@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router,Switch, Redirect } from "react-router-do
 import NotFound from '../containers/NotFound';
 import Signup from "../containers/SignupInstructor";
 import SignupStudent from '../containers/SignupStudent';
+import Dashboard from "../containers/Dashboard";
 
 const App = () => {
   return (
@@ -10,10 +11,11 @@ const App = () => {
       <Switch>
         <Route exact path={["/","/signup"]} component={Signup}>
           <Redirect to="/signup/instructor" />
-          </Route>
+        </Route>
           <Route exact path={"/signup/instructor"} component={Signup}></Route>
           <Route exact path={"/signup/student"} component={SignupStudent}></Route>
-        <Route component={NotFound} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route component={NotFound} />
       </Switch>
     </Router>
   );

@@ -1,1 +1,0 @@
-export const COUNT_CLICKS = "COUNT_CLICKS";

@@ -17,9 +17,9 @@ const Home = (props) => {
   );
 };
 
-const mapStateToProps = (globalState) => {
+const mapStateToProps = ({ btnClicks }) => {
   return {
-    globalState,
+    globalState: btnClicks,
   };
 };
 const mapDispatchToProps = {
