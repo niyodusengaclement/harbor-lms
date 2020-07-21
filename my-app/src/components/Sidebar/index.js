@@ -13,7 +13,7 @@ const Sidebar = (props) => {
 	const { userInfo } = props;
   return (
     <div >
-			<div id="sidebar" className="sidebar nav_open">
+			<div id="sidebar" className="sidebar">
 				<div className="scrollbar-inner sidebar-wrapper">
 						{/* We will retrieve all the info in db according to the user */}
 						<div className="companyImg">

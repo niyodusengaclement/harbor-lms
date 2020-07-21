@@ -3,20 +3,32 @@ import TopHeader from "../components/TopHeader";
 import CourseCard from "../components/CourseCard";
 import "../assets/styles/main.scss";
 import { connect } from "react-redux";
-import AlertComponent from '../components/Alert';
 import { getCourses } from "../redux/actions/coursesActions";
 import { Spinner } from "react-bootstrap";
+import NewCourseModal from "../components/NewCourseModal";
 
 const Dashboard = (props) => {
+      
+  const toggleCourseModal = () => {
+    const el = document.getElementById('newCourseModal');
+    const el1 = el.style.display === 'block' ? el.style.display = 'none' : el.style.display = 'block';
+  }
+
+	const buttons = [
+    {
+      name: 'New Course +',
+      clickHandler: toggleCourseModal
+    },
+  ];
+
   useEffect(() => { props.fetchCourses(); }, []);
   const { values, isLoading } = props.courses;
-  console.log(values);
   const publishedCourses = values.length > 0 ? values.filter(({ isPublished }) => isPublished) : [];
   const unPublishedCourses = values.length > 0 ? values.filter(({ isPublished }) => !isPublished) : [];
   return (
     <div className="wrapper">
-      <TopHeader page='Dashboard'/>
-      
+      <TopHeader page='Dashboard' buttons={buttons} />
+      <NewCourseModal />
       {/* Main panel */}
 			<div className="main-panel">
 				<div className="content">
@@ -24,17 +36,11 @@ const Dashboard = (props) => {
 						<h4 className="page-title pb-4">Published</h4>
 
 						<div className="row">
-          <AlertComponent isError={true} message='SUcces'/>
               {
                 publishedCourses.length > 0 ? publishedCourses.map((course, idx) => 
                   <CourseCard
                     key={idx}
-                    name={course.name}
-                    description={course.description}
-                    hasImage={course.hasImage}
-                    imageUrl={course.imageUrl}
-                    isPublished={course.isPublished}
-                    color={course.color}
+                    course={course}
                   />
                 ) :<p className="pl-3">You haven't published any course  yet</p>
               }
@@ -53,12 +59,7 @@ const Dashboard = (props) => {
                 unPublishedCourses.length > 0 ? unPublishedCourses.map((course, idx) => 
                   <CourseCard
                     key={idx}
-                    name={course.name}
-                    description={course.description}
-                    hasImage={course.hasImage}
-                    imageUrl={course.imageUrl}
-                    isPublished={course.isPublished}
-                    color={course.color}
+                    course={course}
                   />
                 ) : <p className="pl-3">You don't have unpublished course</p>
               }

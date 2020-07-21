@@ -29,12 +29,30 @@ export const getCourses = () => {
           .get()
           .then((res)=>{
             res.forEach((doc) => {
-              courses.push(doc.data())
+              const data = doc.data()
+              data.id = doc.id;
+              courses.push(data)
             });
-              return dispatch(actionCreator(GET_COURSE_SUCCESS, courses));
+            return dispatch(actionCreator(GET_COURSE_SUCCESS, courses));
           })
           .catch((err) => {
             return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
       });
+  };
+};
+
+export const publishOrUnpublishCourses = (data) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    dispatch(actionCreator(CREATE_COURSE_START));
+    const course = firestore.collection("courses").doc(data.id);
+    data.isPublished = !data.isPublished
+    return course.update(data)
+    .then((res)=>{
+      return dispatch(actionCreator(GET_COURSE_SUCCESS, course));
+    })
+    .catch((err) => {
+      return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
+    });
   };
 };
