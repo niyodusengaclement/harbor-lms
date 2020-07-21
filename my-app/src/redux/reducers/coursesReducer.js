@@ -37,7 +37,6 @@ export default (state = initialState, { type, payload }) => {
         isLoaded: true,
         isLoading: false,
         values: [
-          ...state.values,
           ...payload
         ]
       };

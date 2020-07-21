@@ -3,7 +3,6 @@ import { faBars, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../assets/styles/styles.scss";
 import { Link } from "react-router-dom";
-import NewCourseModel from "../components/NewCourseModal";
 import Sidebar from "./Sidebar/index";
 
 const TopHeader = (props) => {
@@ -15,16 +14,10 @@ const TopHeader = (props) => {
     const el = document.getElementById('dropdown');
     const el1 = el.style.display === 'block' ? el.style.display = 'none' : el.style.display = 'block';
   }
-  
-  const toggleCourseModal = () => {
-    const el = document.getElementById('newCourseModal');
-    const el1 = el.style.display === 'block' ? el.style.display = 'none' : el.style.display = 'block';
-  }
 
   return (
     <>
       <Sidebar />
-      <NewCourseModel />
       <div className="main-header">
         <div className="logo-header">
           <Link to="#" className="logo">
@@ -35,9 +28,17 @@ const TopHeader = (props) => {
           </button>
           <button className="topbar-toggler more" onClick={rightToggle}><FontAwesomeIcon className="top-icons" icon={faEllipsisV} /></button>
           
-          <div className="dropdown" >
+          <div className="dropdown auto-hide" >
               <div className="dropdown-menu float-right" id="dropdown">
-                <button className="dropdown-item" onClick={toggleCourseModal}>New course +</button>
+                {
+                  props.buttons && props.buttons.length > 0 ?
+                  props.buttons.map((btn, idx) =>
+                  <button className="dropdown-item" key={idx} name={btn.name} onClick={btn.clickHandler}>{btn.name}</button>
+                  ) 
+                  :
+                  null
+                }
+
               </div>
           </div>
         </div>
@@ -46,9 +47,16 @@ const TopHeader = (props) => {
             <h5 className="nav-title">{props.page}</h5>
 
             <ul className="navbar-nav topbar-nav ml-md-auto align-items-center">
-              <li className="nav-item pl-2">
+              <li className="nav-item">
                 <div>
-                  <button id="navbar-nav-menu" type="button" className="blue-btn" onClick={toggleCourseModal}><span>New course +</span></button>
+                  {
+                  props.buttons && props.buttons.length > 0 ?
+                  props.buttons.map((btn, idx) =>
+                  <button type="button" className={!btn.class ? "blue-btn" : btn.class} key={idx} name={btn.name} onClick={btn.clickHandler}><span>{btn.name}</span></button>
+                  ) 
+                  :
+                  null
+                }
                 </div>
               </li>
 						</ul>

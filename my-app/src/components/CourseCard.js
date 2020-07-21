@@ -1,27 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../assets/styles/card.scss";
+import { connect } from "react-redux";
+import { publishOrUnpublishCourses } from "../redux/actions/coursesActions";
 
-const CourseCard = ({ name, hasImage, imageUrl, description, isPublished, color }) => {
-  return (
+const CourseCard = (props) => {
+  const updateState = (data) => {
+    props.update(data);
+  }
+
+  return ( 
     <>
       <div className="col-md-3">
         <div className="card course-card">
           {
-          hasImage ? <div className="course-image"><img className="card-img-top img-fluid course-image" src={imageUrl} alt=""/></div> : 
-          <div style={{backgroundColor: color}} className="course-image"></div>
+          props.course.hasImage ? <div className="course-image"><img className="card-img-top img-fluid course-image" src={props.course.imageUrl} alt=""/></div> : 
+          <div style={{backgroundColor: props.course.color}} className="course-image"></div>
           }
           <div className="button mb-1">
-            <button className="float-right publish-unpublish-btn"><span>{isPublished ? 'Unpublish' : 'Publish'}</span></button>
+            <button className="float-right publish-unpublish-btn" onClick={(e) => updateState(props.course)}><span>{props.course.isPublished ? 'Unpublish' : 'Publish'}</span></button>
           </div>
           <div className="card-block p-3">
-            <p className="course-title"><Link to="">{name}</Link></p>
+            <p className="course-title"><Link to={`courses/${props.course.id}/assignments`}>{props.course.name}</Link></p>
             <p className="card-text card-font">
             {
-              !description ? 
+              !props.course.description ? 
               null
               : 
-              description.length < 60 ? description.substr(0, 60) : `${description.substr(0, 60)}...`
+              props.course.description.length < 60 ? props.course.description.substr(0, 60) : `${props.course.description.substr(0, 60)}...`
             }
             </p>
           </div>
@@ -31,7 +37,9 @@ const CourseCard = ({ name, hasImage, imageUrl, description, isPublished, color 
   );
 };
 
-export default CourseCard;
+export default connect(null, {
+  update: publishOrUnpublishCourses
+})(CourseCard);
 
 
 

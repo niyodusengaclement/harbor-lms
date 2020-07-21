@@ -4,6 +4,7 @@ import NotFound from '../containers/NotFound';
 import Signup from "../containers/SignupInstructor";
 import SignupStudent from '../containers/SignupStudent';
 import Dashboard from "../containers/Dashboard";
+import Assignments from "../containers/Assignments";
 
 const App = () => {
   return (
@@ -15,6 +16,8 @@ const App = () => {
           <Route exact path={"/signup/instructor"} component={Signup}></Route>
           <Route exact path={"/signup/student"} component={SignupStudent}></Route>
           <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/courses" component={Assignments} />
+          <Route exact path="/courses/:courseId/assignments" component={Assignments} />
           <Route component={NotFound} />
       </Switch>
     </Router>

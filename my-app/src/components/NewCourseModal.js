@@ -13,7 +13,6 @@ const NewCourseModal = (props) => {
   const [courseName, setcourseName] = useState('');
   const [courseDescription, setcourseDescription] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
 
   const toggleCourseModal = () => {
     const el = document.getElementById('newCourseModal');
@@ -42,7 +41,6 @@ const NewCourseModal = (props) => {
     .then(({url}) => {
       data.imageUrl = url;
       props.saveCourse(data);
-      setSuccessMsg('Course saved successfully');
       clearInput()
       toggleCourseModal();
     })
@@ -52,12 +50,11 @@ const NewCourseModal = (props) => {
   const SendHandler = (e) => {
     e.preventDefault();
     setErrorMsg('');
-    setSuccessMsg('');
 
     if(courseName === '') {setErrorMsg('Course Name is required');}
-    else if(!courseDescription === '') {setErrorMsg('Course Description is required');}
+    else if(courseDescription === '') {setErrorMsg('Course Description is required');}
     else {
-      const colors = ['#3359DF', '#378599', '#bb9c10', '#14aa0f'];
+      const colors = ['#3359DF', '#378599', '#bb9c10', '#14aa0f', '#630656', '#81d3e7', '#2d035c'];
       var color = colors[Math.floor(Math.random() * colors.length)];
 
       const data = {
@@ -72,7 +69,6 @@ const NewCourseModal = (props) => {
       }
       else {
         props.saveCourse(data);
-        setSuccessMsg('Course saved successfully');
         clearInput()
         toggleCourseModal();
       }
@@ -81,7 +77,6 @@ const NewCourseModal = (props) => {
 
   const changeHandler = (evt) => {
     setErrorMsg('');
-    setSuccessMsg('');
     evt.target.name === 'name' ? setcourseName(evt.target.value)
     : evt.target.name === 'description' ? setcourseDescription(evt.target.value)
     : void(0);

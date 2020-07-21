@@ -333,6 +333,7 @@
   color: #FFFFFF;
   font-size: 14px;
   margin-top: 7px;
+  margin-left: 6px;
 }
 
 .gray-btn{
@@ -344,6 +345,7 @@
   border-radius: 3px;
   color: #000000;
   font-size: 14px;
+  margin-left: 6px;
 }
 .school-logo{
   display: inline-block;
@@ -412,6 +414,11 @@ color: #0A21A8;
     opacity: 1;
   }
 
+}
+@media screen and (min-width: 991px) {
+  .auto-hide {
+    display: none;
+  }
 }
 @media screen and (max-width: 991px) {
   .sidebar {
@@ -485,7 +492,7 @@ color: #0A21A8;
  }
 
 /* portrait tablets, portrait iPad*/
-@media (min-width:600px) and (max-width:801px) { 
+@media (min-width:600px) and (max-width:801px) {
   .modal-dialog {
     position:absolute;
     top: 30% !important;
