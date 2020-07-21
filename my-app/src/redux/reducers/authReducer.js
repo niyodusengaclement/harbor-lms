@@ -18,7 +18,21 @@ export default (state = initialState, action) => {
         return {
           ...state,
           authError: {...action.error},
-          loading: true
+          loading: false
+        }
+      }
+      case actionTypes.LOGIN_SUCCESS: {
+        return {
+          ...state,
+          authResponse: {...action.response},
+          loading: false
+        }
+      }
+      case actionTypes.LOGIN_FAILURE: {
+        return {
+          ...state,
+          authError: {...action.error},
+          loading: false
         }
       }
     default: return state;

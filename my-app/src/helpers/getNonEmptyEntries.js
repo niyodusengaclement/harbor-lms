@@ -1,9 +1,10 @@
 const nonEmptyArrayEntries = (obj) => {
   return Object.entries(obj).filter((entry) => {
+    const objectValueConvertedToStr = `${entry[1]}`
     return (
-      entry[1] !== null &&
-      entry[1] !== undefined &&
-      entry[1].trim().length !== 0
+      objectValueConvertedToStr !== null &&
+      objectValueConvertedToStr !== undefined &&
+      objectValueConvertedToStr.length !== 0
     );
   });
 };

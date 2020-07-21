@@ -13,6 +13,8 @@ import { Spinner } from 'react-bootstrap';
 import AlertComponent from '../components/Alert';
 import {Redirect} from 'react-router-dom';
 import getNonEmptyEntries from '../helpers/getNonEmptyEntries';
+import { setDocument, getDocument } from "../database/queries";
+import generateStudentUniqueNumber from "../helpers/generateStudentUniqueNumber";
 
 const Signup =(props) => {
     const [fullName, setName] = useState();
@@ -51,13 +53,30 @@ const Signup =(props) => {
         : target.type === 'checkbox' ? setTermsAgreement(target.checked)
         : void(0);
     }
-    const handleClick = (target) => {
+
+
+
+const getStudentUniqueNumber = async () => {
+    const currentNumberOfStudents = JSON.parse(
+      await getDocument("systemData", "users") ).currentNumberOfStudents;
+
+    const studentUniqueNumber = generateStudentUniqueNumber(currentNumberOfStudents);
+    setDocument("systemData", "users", {
+      currentNumberOfStudents: parseInt(currentNumberOfStudents) + 1,
+    });
+    return studentUniqueNumber;
+};
+    const handleClick = async (target) => {
         setErrorMsg('');
         setSuccessMsg('');
         setIsLoading(true);
         if(password !== confirmPassword){ setErrorMsg('confirm password not matching password');}
         else if(fullName && fatherName && motherName && role && password && termsAgreement && target.name === 'Register'){
-            const studentAuthInfo = {fullName,fatherName,motherName,role,email, phoneNumber,password};
+            const studentUniqueNumber = await getStudentUniqueNumber();
+            let studentAuthInfo;
+            if(!phoneNumber || (!email && !phoneNumber)) studentAuthInfo = {fullName,fatherName,motherName,role,email:`${studentUniqueNumber}@noemail.com`,password,studentUniqueNumber};
+            else if(!email) studentAuthInfo = {fullName,fatherName,motherName,role,email:`${studentUniqueNumber}@noemail.com`, phoneNumber,password,studentUniqueNumber};
+            else studentAuthInfo = {fullName,fatherName,motherName,role,email, phoneNumber,password,studentUniqueNumber};
             props.signup(getNonEmptyEntries(studentAuthInfo));
             if(!props.authError)setErrorMsg(null); 
         }
@@ -129,16 +148,17 @@ const Signup =(props) => {
     )
 }
 const mapStateToProps = (state) => {
+
     return {
       loading: state.auth.loading,
       auth: state.firebase.auth,
-      authError: state.auth.authError
+      authError: state.auth.authError,
     }
   }
   
   const mapDispatchToProps = (dispatch)=> {
     return {
-      signup: (newUser) => dispatch(signup(newUser))
+      signup: (newUser) => dispatch(signup(newUser)),
     }
   }
   
