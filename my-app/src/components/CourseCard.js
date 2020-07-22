@@ -42,6 +42,3 @@ const CourseCard = (props) => {
 export default connect(null, {
   update: publishOrUnpublishCourses
 })(CourseCard);
-
-
-

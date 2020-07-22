@@ -6,6 +6,9 @@
   min-height: 200px;
   margin-top: -20px;
   margin-bottom: 40px;
+  &:hover{
+    cursor: pointer;
+  }
 }
 
 .card-block {

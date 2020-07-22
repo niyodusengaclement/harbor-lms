@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
+import "../assets/styles/components/modal.scss";
 
 const NewAssignment = (props) => {
   const [ assignmentName, setAssignmentName ] = useState('');

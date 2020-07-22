@@ -4,6 +4,7 @@ import '../assets/styles/components/inputField.scss';
 export default ({type,id,name,value,selectOptions,radioInputs,label,checked, placeholder,className,required, handleChange}) => {
   placeholder = required ? `${placeholder} *` : placeholder; 
   let options;
+  console.log('selectOptions: ', selectOptions);
   if(selectOptions){
      options = selectOptions.map(selectOption => {
       if(name === 'members'){

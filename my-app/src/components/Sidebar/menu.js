@@ -3,7 +3,7 @@ import { faTachometerAlt, faBook, faUserCircle, faBell, faSignOutAlt } from "@fo
 export const instructor = [
   {
     name: 'Dashboard',
-    url: '/dashboard',
+    url: '/ins.dashboard',
     icon: faTachometerAlt,
   },
   {
@@ -26,7 +26,7 @@ export const instructor = [
 export const student = [
   {
     name: 'Courses',
-    url: '/dashboard',
+    url: '/stu.dashboard',
     icon: faTachometerAlt,
   },
   {

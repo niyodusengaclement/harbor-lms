@@ -60,7 +60,7 @@ const Login =(props) => {
             variant="primary"
             className={isLoading ? 'spinner--position__center' : 'hide'}
             />
-            {successMsg && !props.loading ? redirectTo('/dashboard') : ''}
+            {successMsg && !props.loading ? redirectTo('/dashboardRedirect') : ''}
             <div className="signup--container">
                 
                 <div className="signup--section">

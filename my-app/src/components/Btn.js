@@ -4,7 +4,7 @@ import '../assets/styles/components/btn.scss'
 export default ({name, label, handleClick, className}) => {
     return(
         <Button name={name} className={`btn ${className ? className : ''}`} onClick={(event) => handleClick(event.target)}>
-            <span id={name}>{label}</span>
+            <span>{label}</span>
         </Button>
     )
 }

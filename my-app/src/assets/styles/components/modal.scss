@@ -28,3 +28,57 @@
 .modal--btn{
     width: auto;
 }
+
+.modal--input__large{
+    width: 40rem;
+}
+// .modal-dialog{
+//     height: 30rem;
+//     position: absolute;
+//     bottom: -40%!important;
+//     left: 12%;
+// }
+.modal-body{
+    overflow-y: scroll;
+    margin-bottom: 5rem;
+}
+.method__email{
+    display: none;
+}
+.modal-footer{
+    >button{
+        background-color: #3359df;
+        width: 20%;
+        &:hover{
+            background-color: #3359df;
+        }
+    }
+}
+.hide{
+    display: none;
+}
+.show{
+    display: block;
+}
+.modal__btn--with--badge{
+    width: auto;
+    font-size: $font-size-smaller;
+    background-color: white;
+    color: black;
+    border: none;
+    &:hover{
+        background-color: white;
+        color: black;
+    }
+    // &:
+}
+.badge{
+    margin-left:.1rem;
+    margin-right: 0;
+    &:hover{
+        cursor: pointer;
+    }
+}
+.modal--selected{
+    background: red;
+  }

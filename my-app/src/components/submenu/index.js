@@ -13,7 +13,7 @@ const Submenu = ({ page }) => {
               role === 'instructor' ?
               instructor.map(({ name, url }, idx) => 
                 <p key={idx} className={page === name ? 'submenu isActive' : 'submenu'}>
-                  <Link to={url}>
+                  <Link to={`/courses/${localStorage.getItem('courseId')}${url}`}>
                     {name}
                   </Link>
                 </p>
