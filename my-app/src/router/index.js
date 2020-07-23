@@ -21,11 +21,11 @@ import CourseSection from "../containers/CourseSection";
 const App = () => {
   return (
     <>
-      <ToastContainer />
-      <Router>
-        <Switch>
-          <Route exact path={["/", "/signup"]} component={SignupInstructor}>
-            <Redirect to="/signup/instructor" />
+    <ToastContainer/>
+    <Router>
+      <Switch>
+        <Route exact path={["/","/signup"]} component={SignupInstructor}>
+          <Redirect to="/signup/instructor" />
           </Route>
           <Route
             exact
@@ -52,8 +52,8 @@ const App = () => {
             component={CourseSection}
           />
           <Route component={NotFound} />
-        </Switch>
-      </Router>
+      </Switch>
+    </Router>
     </>
   );
 };

@@ -159,11 +159,11 @@ const NewCourseModal = (props) => {
                     : null
                   }
                 </div>
-                <div className="modal-btn">
-                  <button type="button" className="blue-btn" onClick={SendHandler}><span>Create course</span></button>
-                </div>
               </div>
             </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="blue-btn" onClick={SendHandler}><span>Create course</span></button>
           </div>
         </div>
       </div>
