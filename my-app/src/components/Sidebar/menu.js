@@ -13,7 +13,7 @@ export const instructor = [
   },
   {
     name: 'Notifications',
-    url: '/notifocations',
+    url: '/notifications',
     icon: faBell,
   },
   {
@@ -36,7 +36,7 @@ export const student = [
   },
   {
     name: 'Notifications',
-    url: '/notofocations',
+    url: '/notifications',
     icon: faBell,
   },
   {

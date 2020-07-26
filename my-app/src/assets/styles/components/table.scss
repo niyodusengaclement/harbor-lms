@@ -1,8 +1,8 @@
 @import '../base.scss';
 
 .table{
-    overflow-y: scroll;
-    height: 40%;
+    overflow: scroll;
+    height: 26.2rem;
 }
 
 th{
@@ -12,9 +12,16 @@ tbody{
     >tr{
         background-color: white;
         border: #f5f8ff solid 5px;
+        height: 20px!important;
     }
 }
-
+.table--row{
+    height: 1000px !important;
+    overflow:hidden;
+}
+.table--row{
+    height: 10px!important;
+}
 
 .dropdown {
     position: relative;

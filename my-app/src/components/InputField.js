@@ -1,7 +1,7 @@
 import React from "react";
 import '../assets/styles/components/inputField.scss';
 
-export default ({type,id,name,selectOptions,radioInputs,label,checked, placeholder,className,required, handleChange}) => {
+export default ({type,id,name,value,selectOptions,radioInputs,label,checked, placeholder,className,required, handleChange}) => {
   placeholder = required ? `${placeholder} *` : placeholder; 
   let options;
   if(selectOptions){
@@ -15,8 +15,8 @@ export default ({type,id,name,selectOptions,radioInputs,label,checked, placehold
   if(radioInputs){
     options = radioInputs.map(radioInput => {
      return(
-       <span>
-         <input type="radio" name={radioInput.name} value={radioInput.value} onChange={(event)=>handleChange(event.target)}/>{radioInput.label}
+       <span className={className}>
+         <input type="radio" name={radioInput.name} value={radioInput.value} checked={radioInput.checked} onChange={(event)=>handleChange(event.target)}/>{radioInput.label}
        </span>
      )
     })
@@ -24,15 +24,15 @@ export default ({type,id,name,selectOptions,radioInputs,label,checked, placehold
   return (
     <div>
       {
-        type==='select' ? <select name={name} id={id} className={`inputField--extra-large ${className}`} onChange={(event)=>handleChange(event.target)} multiple={name === 'members' ? true : false} > 
+        type==='select' ? <select name={name} id={id} value={value} className={`inputField--extra-large ${className}`} onChange={(event)=>handleChange(event.target)} multiple={name === 'members' ? true : false} > 
                               {options}
                           </select>
       : type==='checkbox' ? <div className={className}>
-                               <input type={type} defaultChecked={checked ? 'checked' : ''} onChange={(event) => handleChange(event.target)}/>
+                               <input type={type} value={value} defaultChecked={checked ? 'checked' : ''} onChange={(event) => handleChange(event.target)}/>
                                <span>{label}</span>
                             </div>
         : type ==='radio' ? <div> {options} </div>
-        : <input type={type} id={id} name={name} placeholder={placeholder} className={className} onChange={(event)=>handleChange(event.target)}/> 
+        : <input type={type} id={id} name={name} value={value} placeholder={placeholder} className={className} onChange={(event)=>handleChange(event.target)}/> 
       }
     </div>
   );

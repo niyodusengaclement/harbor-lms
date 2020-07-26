@@ -1,17 +1,18 @@
-import React,{useState} from "react";
-import { Table,DropdownButton,Dropdown } from "react-bootstrap";
+import React, { useState } from "react";
+import { Table } from "react-bootstrap";
 import "../assets/styles/components/table.scss";
-import DropDown from './DropDown';
+import DropDown from "./DropDown";
+import { connect } from 'react-redux';
 
-export default (props) => {
-
-  const [dropDownState,setDropDownState] = useState(false);
+const TableComponent  = (props) => {
+  const { tableRows } = props;
+  const [dropDownState, setDropDownState] = useState(false);
 
   const handleClick = (target) => {
-    if(target.id === 'dropdown'){
+    if (target.id === "dropdown") {
       setDropDownState(!dropDownState);
     }
-  }
+  };
   return (
     <div className="table">
       <Table responsive hover>
@@ -20,146 +21,38 @@ export default (props) => {
             <th>name</th>
             <th>ID</th>
             <th>start date</th>
-            <th>finish date</th>
+            <th>end date</th>
             <th>members</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          <tr>
-            <td>Course 1</td>
-            <td>T32122</td>
-            <td>20/04/2020</td>
-            <td>20/08/2020</td>
-            <td>20</td>
-            <td>
-              <DropDown handleClick={handleClick} />
-            </td>
-          </tr>
-          
+          { tableRows.length ? 
+          tableRows.map((tableRow) => {
+            return (
+              <tr>
+                <td>{tableRow.sectionName}</td>
+                <td>{tableRow.sectionId}</td>
+                <td>{tableRow.startingDate}</td>
+                <td>{tableRow.closingDate}</td>
+                <td>{tableRow.members}</td>
+                <td>
+                  <DropDown handleClick={handleClick} rowId={tableRow.sectionName} />
+                </td>
+              </tr>
+            );
+          }) : <p>No data found</p>
+          }
         </tbody>
       </Table>
     </div>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    section: state.courses.section,
+  };
+};
+
+export default connect(mapStateToProps, )(TableComponent);

@@ -7,7 +7,7 @@ const SpecificCourse = (props) => {
   return (
     <div className="wrapper">
       <TopHeader
-				page={` Courses > ${props.page}`}
+				page={` courses > ${props.page}`}
 				buttons={props.buttons}
 			/>
       {/* Main panel */}

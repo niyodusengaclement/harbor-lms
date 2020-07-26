@@ -1,12 +1,30 @@
 @import '../base.scss';
 
-.modal--header--title{
+.modal{
+    height: 50rem;
+    h6{
+        margin: .5rem auto;
+    }
+}
+.modal--header--title {
     color: $color-primary;
 }
-.modal--header,.modal--body,.modal--footer{
+
+.modal--header,
+.modal--body,
+.modal--footer {
     margin-left: 2rem;
 }
-.modal--body--radio{
-    background: red;
-    margin: 5rem;
+
+.modal--body--radio {
+    margin-right: 10%;
+    >input{
+        margin-right: 1rem;
+    }
+}
+.modal--body--date{
+    display: flex;
+}
+.modal--btn{
+    width: auto;
 }

@@ -26,7 +26,7 @@ const Login =(props) => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
          } else {
-             if(props.authError) {setErrorMsg(props.authError.message);};
+             if(props.authError) {setErrorMsg(`${props.authError.message} Or invalid SUN`);};
              if(props.authResponse && props.authResponse.message === 'success') {setSuccessMsg('Successfully logged in!');}
          }
     },[props.authError,props.authResponse]);
@@ -41,7 +41,7 @@ const Login =(props) => {
         setErrorMsg('');
         setSuccessMsg('');
         setIsLoading(true);
-        if(emailOrStudentUniqueNumber && password && target.name === 'login'){
+        if(emailOrStudentUniqueNumber && password && (target.name === 'login' || target.id === 'login')){
             props.login({emailOrStudentUniqueNumber,password});
             if(!props.authError)setErrorMsg(null); 
         }
