@@ -8,7 +8,7 @@ import { Spinner } from "react-bootstrap";
 import NewCourseModal from "../components/NewCourseModal";
 
 const Dashboard = (props) => {
-      
+  // const { role }
   const toggleCourseModal = () => {
     const el = document.getElementById('newCourseModal');
     const el1 = el.style.display === 'block' ? el.style.display = 'none' : el.style.display = 'block';

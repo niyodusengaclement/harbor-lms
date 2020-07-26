@@ -17,6 +17,11 @@ import "../assets/styles/styles.scss";
 import ProtectedRoutes from "../containers/ProtectedRoutes";
 import Logout from "../containers/Logout";
 import CourseSection from "../containers/CourseSection";
+import 'react-toastify/dist/ReactToastify.css';
+import '../assets/styles/styles.scss';
+import Members from '../containers/Members';
+import SpecificAssignment from "../containers/SpecificAssignment";
+import Submissions from "../containers/Submissions";
 
 const App = () => {
   return (
@@ -24,23 +29,16 @@ const App = () => {
     <ToastContainer/>
     <Router>
       <Switch>
-        <Route exact path={["/","/signup"]} component={SignupInstructor}>
-          <Redirect to="/signup/instructor" />
-          </Route>
-          <Route
-            exact
-            path={"/signup/instructor"}
-            component={SignupInstructor}
-          ></Route>
-          <Route
-            exact
-            path={"/signup/student"}
-            component={SignupStudent}
-          ></Route>
-          <Route exact path={"/login"} component={Login}></Route>
-          <ProtectedRoutes exact path="/dashboard" component={Dashboard} />
-          <ProtectedRoutes exact path="/logout" component={Logout} />
+          <Route exact path={"/signup/instructor"} component={SignupInstructor}></Route>
+          <Route exact path={"/signup/student"} component={SignupStudent}></Route>
+          <Route exact path={["/", "/login"]} component={Login}></Route>
+          <ProtectedRoutes exact path='/dashboard' component={Dashboard} />
+          <ProtectedRoutes exact path='/logout' component={Logout} />
           <ProtectedRoutes exact path="/courses" component={Assignments} />
+          <ProtectedRoutes exact path="/courses/:courseId/assignments" component={Assignments} />
+          <ProtectedRoutes exact path="/courses/:courseId/assignments/:assignmentId" component={SpecificAssignment} />
+          <ProtectedRoutes exact path="/courses/:courseId/assignments/:assignmentId/submissions/:submissionId" component={Submissions} />
+          <ProtectedRoutes exact path="/courses/:courseId/members" component={Members} />
           <ProtectedRoutes
             exact
             path="/courses/:courseId/assignments"

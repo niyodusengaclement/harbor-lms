@@ -133,12 +133,12 @@ const NewAssignment = (props) => {
       <div className="modal-dialog modal-dialog-scroll">
         <div className="modal-content">
           <div className="modal-header">
-            <h6 className="modal-title m-title pl-2" id="NewAssignmentLabel">Create a new Assignment</h6>
+            <h5 className="modal-title m-title" id="NewAssignmentLabel">Create a new Assignment</h5>
             <button type="button" className="close" onClick={toggleModal}>
               <span>&times;</span>
             </button>
           </div>
-          <div className="modal-body modal-body-scroll">
+          <div className="modal-body-scroll">
             <Spinner
               animation="border"
               variant="primary"
@@ -178,7 +178,8 @@ const NewAssignment = (props) => {
                     <select value={isEdit && data ? data.submissionType: submissionType} onChange={isEdit && data ? onChangeHandler : (e) => setSubmissionType(e.target.value)} name="submissionType" className="form-control" >
                       <option value=''>Select Submission Type</option>
                       <option>File upload</option>
-                      <option>Text entry</option>
+                      <option>Website URL</option>
+                      <option>Text Entry</option>
                       <option>Any</option>
                     </select>
                   </div>

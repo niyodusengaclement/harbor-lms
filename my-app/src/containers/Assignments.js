@@ -3,19 +3,22 @@ import SpecificCourse from "../components/SpecificCourse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import NewAssignment from "../components/NewAssignment";
-import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createAssignment } from "../redux/actions/assignmentActions";
+import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createAssignment, getSubmissions } from "../redux/actions/assignmentActions";
 import { connect } from "react-redux";
 import { Spinner, Dropdown } from "react-bootstrap";
 import { getDateAndTime } from "../helpers/getDate";
 import { getCourses } from "../redux/actions/coursesActions";
 import SearchBar from "../components/SearchBar";
+import { Link } from "react-router-dom";
+import TableLayout from "../components/TableLayout";
 
 const Assignments = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState({});
   const [filtered, setFilter] = useState([]);
   
-  const { assignments, courses, match: { params }  } = props;
+  const { assignments, courses, userProfile, match: { params }  } = props;
+  const { role } = userProfile;
 
   useEffect(() => {
     const { match: { params }  } = props;
@@ -24,7 +27,7 @@ const Assignments = (props) => {
   }, []);
 
   useEffect(() => {
-    setFilter(assignments.values)
+    setFilter(assignments.values);
   }, [assignments.values]);
 
 	const hideOrShow = () => {
@@ -43,20 +46,26 @@ const Assignments = (props) => {
   }
 
   const publishOrUnpublish = (data) => props.pubOrUnpub(data)
-  const deleteAss = (id) => props.delete(id)
+  const deleteAss = (id) => {
+    const yes = window.confirm('Are you Sure! This action is irreversible');
+    if(yes) {
+      props.delete(id);
+    }
+  }
+
+  const allAssignments = role === 'student' ? assignments.values.filter(({isPublished}) => isPublished === true) : assignments.values;
 
   const onSearchHandler = (e) => {
-    const searchInput = e.target.value;
-    const filteredData = assignments.values.filter(value => {
+    const searchInput = e.target.value.toLowerCase();
+    const filteredData = allAssignments.filter(value => {
       return (
-        value.assignmentName.toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.section.toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.points.toString().toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.endDate.toString().toLowerCase().includes(searchInput.toLowerCase()) 
+        value.assignmentName.toLowerCase().includes(searchInput) ||
+        value.section.toLowerCase().includes(searchInput) ||
+        value.points.toString().toLowerCase().includes(searchInput) ||
+        value.endDate.toString().toLowerCase().includes(searchInput) 
         );
       });
       return setFilter(filteredData);
-      
   }
 	const buttons = [
     {
@@ -75,6 +84,10 @@ const Assignments = (props) => {
         />
         : <p className="pl-3">No Data found</p>;
 
+  const headers = role === 'instructor' ? 
+  ['Assignment', 'Section', 'Due Date', 'State', '']
+  : role === 'student' ? ['Assignment', 'Due Date'] : [];
+  
   return (
     <SpecificCourse page={title} submenu="Assignments" buttons={buttons}>
 		  <NewAssignment
@@ -87,76 +100,72 @@ const Assignments = (props) => {
 
       <SearchBar onChangeHandler={onSearchHandler} />
 
-        <div className="carded-table-header">
-          <div className="col col-md-3">
-            <p className="card-text">Assignment Name</p>
-          </div>
-          <div className="col col-md-3">
-            <p className="card-text">Section</p>
-          </div>
-          <div className="col col-md-3">
-            <p className="card-text">Due Date</p>
-          </div>
-          <div className="col">
-            <p className="card-text">State</p>
-          </div>
-          <div className="col ">
-            <p className="card-text"></p>
-          </div>
-
-        </div>
-
-        <div className="carded-table-scroll">        
-        {
-          filtered.length > 0 ? filtered.map((ass, idx) => 
-          <div className="card carded-table" key={idx}>
-            <div className="card-body carded-table-body">
-              <div className="col col-md-3">
-                <p className="card-text">{ass.assignmentName}</p>
-              </div>
-              <div className="col col-md-3">
-                <p className="card-text">{ass.section}</p>
-              </div>
-              <div className="col col-md-3">
-                <p className="card-text">{getDateAndTime(ass.endDate)}</p>
-              </div>
-              <div className="col">
-              <span className={ass.isPublished ? 'badge badge-success bagde-published ' : 'badge badge-secondary bagde-unpublished'} >{ass.isPublished ? 'PUBLISHED' : 'UNPUBLISHED'}</span>
-              </div>
-              <div className="col ">
+        <div className="carded-table-scroll">   
+    {/* Table  Start*/}
+      <TableLayout headers={headers}>      
+          {
+            role === 'instructor' && filtered.length > 0
+            ? filtered.map((ass, idx) => 
+  
+              <tr key={idx}>
+                <td> 
+                <Link className="black-links" to={`/courses/${params.courseId}/assignments/${ass.id}`} >{ass.assignmentName}</Link>
+                </td>
+                <td>{ass.section}</td>
+                <td>{getDateAndTime(ass.endDate)}</td>
+                <td>
+                <span className={ass.isPublished ? 'badge badge-success bagde-published ' : 'badge badge-secondary bagde-unpublished'} >{ass.isPublished ? 'PUBLISHED' : 'UNPUBLISHED'}</span>
+                </td>
+                <td>
+  
                 <div className="dropdown-no-caret float-right">
-                  <Dropdown>
-                    <Dropdown.Toggle id="dropdown-button-drop-left">
-                      <div className="drop-menu"><FontAwesomeIcon icon={faEllipsisH} /></div>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item onClick={(e) => publishOrUnpublish(ass)} disabled={ass.isPublished ? true : false}>Publish</Dropdown.Item>
-                      <Dropdown.Item onClick={(e) => publishOrUnpublish(ass)} disabled={ass.isPublished ? false : true}>Unpublish</Dropdown.Item>
-                      <Dropdown.Item onClick={(e) => toogleAssModal(ass, true)} >Edit</Dropdown.Item>
-                      <Dropdown.Item onClick={(e) => deleteAss(ass.id)}><span className="required">Delete</span></Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </div>
-            </div>
-          </div>
+                    <Dropdown>
+                      <Dropdown.Toggle id="dropdown-button-drop-left">
+                        <div className="drop-menu"><FontAwesomeIcon icon={faEllipsisH} /></div>
+                      </Dropdown.Toggle>
+  
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={(e) => publishOrUnpublish(ass)} disabled={ass.isPublished ? true : false}>Publish</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => publishOrUnpublish(ass)} disabled={ass.isPublished ? false : true}>Unpublish</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => toogleAssModal(ass, true)} >Edit</Dropdown.Item>
+                        <Dropdown.Item onClick={(e) => deleteAss(ass.id)}><span className="required">Delete</span></Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                
+                </td>
+              </tr>
+            )
+          :
+          role === 'student' && filtered.length > 0
+          ? filtered.filter(({isPublished}) => isPublished === true).map((ass, idx) =>
+          <tr key={idx}>
+            <td> 
+            <Link className="black-links" to={`/courses/${params.courseId}/assignments/${ass.id}`} >{ass.assignmentName}</Link>
+            </td>
+          <td>{getDateAndTime(ass.endDate)}</td>
+          </tr>
           )
           :
-          loading
-        }
+          loading        
+          }
+          </TableLayout>
+      {/* Table End */}
+
         </div>
         </div>
         <div className="col">
+        <div className="vl"></div>
           <h5>Notifications</h5>
         </div>
     </SpecificCourse>
   );
 }
 
-const mapStateToProps = ({ assignments, courses }) => ({
+const mapStateToProps = ({ assignments, courses, firebase }) => ({
   courses,
-  assignments
+  assignments,
+  userProfile: firebase.profile,
 });
 
 export default connect(mapStateToProps, {
@@ -164,4 +173,5 @@ export default connect(mapStateToProps, {
   fetchCourses: getCourses,
   pubOrUnpub: publishOrUnpublishAssignment,
   delete: deleteAssignment,
+  fetchSubmissions: getSubmissions
 })(Assignments);

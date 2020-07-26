@@ -54,10 +54,9 @@
 .carded-table-scroll {
   position: fixed;
   width: 700px;
-  height: 55%;
+  height: 65%;
   overflow-y: auto;
   overflow-x: hidden;
-
 }
 .carded-table-body {
   display: flex;
@@ -76,8 +75,21 @@
   color: $color-primary;
   font-size: $font-size-medium;
 }
+.carded-details {
+  -moz-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+  background-color: #F5F8FF;
+  border-radius: 5px;
+}
 .submenu a:hover {
   color: $color-primary;
+}
+.shift-up {
+  margin-top: -10px;
+}
+.ql-editor{
+  min-height:200px;
 }
 .isActive a{
   color: $color-primary;
@@ -133,4 +145,22 @@
   }
 }
 
+.black-links {
+  text-decoration: none;
+  color: black;
+}
 
+.black-links :hover {
+  text-decoration: underline;
+}
+
+.vl {
+  border-left: 1px solid rgba(0, 0, 0, 0.20);
+  height: 90%;
+  position: absolute;
+  margin-left: -10px;
+  top: 17%;
+}
+.right-sidebar {
+  margin-top: 50%;
+}

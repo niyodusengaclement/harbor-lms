@@ -95,7 +95,7 @@ const getStudentUniqueNumber = async () => {
             variant="primary"
             className={isLoading ? 'spinner--position__center' : 'hide'}
             />
-            {successMsg && !props.isLoading ? redirectTo('/dashboardRedirect') : ''}
+            {successMsg && !props.isLoading ? redirectTo('/dashboard') : ''}
             <div className="signup--container">
                 
                 <div className="signup--section">
