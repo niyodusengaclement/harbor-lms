@@ -1,0 +1,12 @@
+@import '../base.scss';
+
+.modal--header--title{
+    color: $color-primary;
+}
+.modal--header,.modal--body,.modal--footer{
+    margin-left: 2rem;
+}
+.modal--body--radio{
+    background: red;
+    margin: 5rem;
+}

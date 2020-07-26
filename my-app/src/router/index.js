@@ -6,6 +6,7 @@ import SignupStudent from '../containers/SignupStudent';
 import Dashboard from "../containers/Dashboard";
 import Assignments from "../containers/Assignments";
 import Login from '../containers/Login';
+import CourseSection from '../containers/CourseSection';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/courses" component={Assignments} />
           <Route exact path="/courses/:courseId/assignments" component={Assignments} />
+          <Route exact path="/courses/sections" component={CourseSection} />
           <Route component={NotFound} />
       </Switch>
     </Router>

@@ -15,8 +15,8 @@ const SpecificCourse = (props) => {
 				<div className="content">
 					<div className="container-fluid">
 						<div className="row">
-              <Submenu page={props.page} />
-              {props.children}
+							<Submenu page={props.submenu} />
+							{props.children}
 						</div>
 						{/* End of row */}
 

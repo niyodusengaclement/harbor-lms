@@ -1,0 +1,55 @@
+@import '../base.scss';
+
+.table{
+    overflow-y: scroll;
+    height: 40%;
+}
+
+th{
+    color: $color-primary;
+}
+tbody{
+    >tr{
+        background-color: white;
+        border: #f5f8ff solid 5px;
+    }
+}
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    right: 3.2rem;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top:.01rem;
+    background-color: #f9f9f9;
+    min-width: 9rem;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    font-size: $font-size-small;
+    padding: .1rem .2rem;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: $color-secondary
+}
+
+.dropdown:hover .dropdown-content {
+    color: $color-secondary;
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    color: $color-secondary;
+    font-weight: bolder;
+}
