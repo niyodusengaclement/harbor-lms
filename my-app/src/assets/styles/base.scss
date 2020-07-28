@@ -31,9 +31,12 @@ $font-family:"times, roboto, arial, 'Times New Roman'";
     position: fixed;
     top:-100%; right:-100%; left:-100%; bottom:-100%;
     margin:auto;
-    z-index:0;
+    z-index:1;
     color: $color-secondary!important;
 }
 .hide{
     display: none;
+}
+.show{
+    visibility: visible;
 }
