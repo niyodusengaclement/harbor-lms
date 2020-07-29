@@ -7,12 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createCourse } from "../redux/actions/coursesActions";
 import { connect } from "react-redux";
 import AlertComponent from './Alert';
+import { getProfile } from "../helpers/utils";
+import { toast } from "react-toastify";
 
 const NewCourseModal = (props) => {
   const [coverImage, setcoverImage] = useState([]);
   const [courseName, setcourseName] = useState('');
   const [courseDescription, setcourseDescription] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const { uid } = getProfile();
 
   const toggleCourseModal = () => {
     const el = document.getElementById('newCourseModal');
@@ -49,15 +51,19 @@ const NewCourseModal = (props) => {
   }
   const SendHandler = (e) => {
     e.preventDefault();
-    setErrorMsg('');
 
-    if(courseName === '') {setErrorMsg('Course Name is required');}
-    else if(courseDescription === '') {setErrorMsg('Course Description is required');}
+    if(courseName === '' || courseDescription === '') {
+      return toast.error('Course Name and Description are required',{
+        position: 'top-center',
+        hideProgressBar: true,
+      });
+    }
     else {
       const colors = ['#3359DF', '#378599', '#bb9c10', '#14aa0f', '#630656', '#81d3e7', '#2d035c'];
       var color = colors[Math.floor(Math.random() * colors.length)];
 
       const data = {
+        instructorId: uid,
         name: courseName,
         description: courseDescription,
         hasImage: coverImage[0] !== undefined ? true : false,
@@ -76,7 +82,6 @@ const NewCourseModal = (props) => {
   }
 
   const changeHandler = (evt) => {
-    setErrorMsg('');
     evt.target.name === 'name' ? setcourseName(evt.target.value)
     : evt.target.name === 'description' ? setcourseDescription(evt.target.value)
     : void(0);
@@ -93,14 +98,13 @@ const NewCourseModal = (props) => {
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h6 className="modal-title m-title pl-2" id="newCourseModalLabel">Create a new course</h6>
+            <h5 className="modal-title m-title pl-2" id="newCourseModalLabel">Create a new course</h5>
             <button type="button" className="close" onClick={toggleCourseModal}>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div className="modal-body">
             <div className="row pl-2 pr-2">
-            <AlertComponent isError={errorMsg !== '' ? true : false} message={errorMsg} />
               <div className="col-md-6">
                 <form onSubmit={SendHandler}>
                   <div className="form-group">
@@ -159,11 +163,11 @@ const NewCourseModal = (props) => {
                     : null
                   }
                 </div>
-                <div className="modal-btn">
-                  <button type="button" className="blue-btn" onClick={SendHandler}><span>Create course</span></button>
-                </div>
               </div>
             </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="blue-btn" onClick={SendHandler}><span>Create course</span></button>
           </div>
         </div>
       </div>

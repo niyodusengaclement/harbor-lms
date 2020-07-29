@@ -90,7 +90,7 @@ const Login =(props) => {
                             <Button name="login" label="Login" handleClick={handleClick}/>   
                         </div>
                         <div className="signup--form--footer login--form--footer"> 
-                            <Text label="New to REMS ? Create account " linkLabel="here" linkAddress="/signup" className="txt"  exception={true} />
+                            <Text label="New to REMS ? Create account " linkLabel="here" linkAddress="/signup/student" className="txt"  exception={true} />
                     </div>
                     </div>
                 </div>

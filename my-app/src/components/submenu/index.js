@@ -1,32 +1,36 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../assets/styles/card.scss";
-import { instructor } from "./submenus";
+import { instructor, student } from "./submenus";
+import { connect } from "react-redux";
 
-const Submenu = ({ page }) => {
-  const role = "instructor";
+
+const Submenu = ({ page, userProfile }) => {
+	const menus = userProfile.role === 'instructor' ? instructor : student;
+
   return (
     <>
       <div className="col-md-2">
         <div className="card p-4 ">
-          {role === "instructor"
-            ? instructor.map(({ name, url }, idx) => (
-                <p
-                  key={idx}
-                  className={page === name ? "submenu isActive" : "submenu"}
-                >
-                  <Link
-                    to={`/courses/${localStorage.getItem("courseId")}${url}`}
-                  >
+            {
+              menus.map(({ name, url }, idx) => 
+                <p key={idx} className={page === name ? 'submenu isActive' : 'submenu'}>
+                  <Link to={`/courses/${localStorage.getItem('courseId')}${url}`}>
                     {name}
                   </Link>
                 </p>
-              ))
-            : null}
+              )
+            }
         </div>
       </div>
     </>
   );
 };
 
-export default Submenu;
+const mapStateToProps = ({ firebase }) => {
+	return {
+	  userProfile: firebase.profile,
+	}
+  }
+
+export default connect(mapStateToProps)(Submenu);
