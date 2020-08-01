@@ -128,6 +128,8 @@ const NewAssignment = (props) => {
     toggleModal();
   }
 
+  const { sections } = props;
+
   return (
     <div className="modal" id="newAssignmentModal">
       <div className="modal-dialog modal-dialog-scroll">
@@ -168,9 +170,12 @@ const NewAssignment = (props) => {
                     <label >Section<span className="required"> *</span></label>
                     <select onChange={isEdit && data ? onChangeHandler : (e) => setSection(e.target.value)} name="section" value={isEdit && data ? data.section :section } className="form-control" >
                       <option value=''>Select Section</option>
-                      <option>Section one</option>
-                      <option>Section Two</option>
-                      <option>Section Three</option>
+                      {
+                        sections.length > 0 ? sections.map(({ sectionName, sectionId }, idx) =>
+                        <option key={idx} value={sectionId}>{sectionName}</option>
+                        )
+                        : null
+                      }
                     </select>
                   </div>
                   <div className="form-group">
@@ -256,8 +261,9 @@ const NewAssignment = (props) => {
   );
 };
 
-const mapStateToProps = ({ assignments }) => ({
-  isLoading: assignments.isLoading
+const mapStateToProps = ({ assignments, courses }) => ({
+  isLoading: assignments.isLoading,
+  sections: courses.sections
 });
 export default connect(mapStateToProps, {
   saveAssignment: createAssignment,

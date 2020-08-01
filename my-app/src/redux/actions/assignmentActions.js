@@ -179,6 +179,60 @@ export const getSubmissions = (assignmentId) => {
   };
 };
 
+export const getSubmissionsByStudentId = (studentId) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    try {
+      const firestore = getFirestore();
+      dispatch(actionCreator(ASSIGNMENT_ACTION_START));
+      const submissions = [];
+      const ref = firestore.collection("assignmentSubmissions");
+      const sub = await ref.where('studentId', '==', studentId).get();
+      if(sub.empty) {
+        return dispatch(actionCreator(GET_ASSIGNMENT_SUBMISSION_SUCCESS, []));
+      }
+      sub.forEach((doc) => {
+        const data = doc.data()
+        data.id = doc.id;
+        submissions.push(data);
+      });
+      return dispatch(actionCreator(GET_ASSIGNMENT_SUBMISSION_SUCCESS, submissions));
+    } catch (err) {
+      toast.error(err, {
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      return dispatch(actionCreator(ASSIGNMENT_ACTION_FAILED, err));
+    }
+  };
+};
+
+export const getSubmissionsBySection = (sectionId) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    try {
+      const firestore = getFirestore();
+      dispatch(actionCreator(ASSIGNMENT_ACTION_START));
+      const submissions = [];
+      const ref = firestore.collection("assignmentSubmissions");
+      const sub = await ref.where('sectionId', '==', sectionId).get();
+      if(sub.empty) {
+        return dispatch(actionCreator(GET_ASSIGNMENT_SUBMISSION_SUCCESS, []));
+      }
+      sub.forEach((doc) => {
+        const data = doc.data()
+        data.id = doc.id;
+        submissions.push(data);
+      });
+      return dispatch(actionCreator(GET_ASSIGNMENT_SUBMISSION_SUCCESS, submissions));
+    } catch (err) {
+      toast.error(err, {
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      return dispatch(actionCreator(ASSIGNMENT_ACTION_FAILED, err));
+    }
+  };
+};
+
 export const updateSubmission = (data) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {

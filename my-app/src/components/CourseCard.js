@@ -9,8 +9,6 @@ const CourseCard = (props) => {
     props.update(data);
   }
 
-  localStorage.setItem('courseId',props.course.id);
-  localStorage.setItem('courseName',props.course.name);
   return ( 
     <>
       <div className="col-md-3">

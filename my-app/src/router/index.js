@@ -22,6 +22,8 @@ import '../assets/styles/styles.scss';
 import Members from '../containers/Members';
 import SpecificAssignment from "../containers/SpecificAssignment";
 import Submissions from "../containers/Submissions";
+import Grades from "../containers/Grades";
+import StudentGrades from "../containers/StudentGrades";
 
 const App = () => {
   return (
@@ -49,6 +51,9 @@ const App = () => {
             path="/courses/:courseId/settings"
             component={CourseSection}
           />
+          <ProtectedRoutes exact path="/courses/:courseId/grades" component={Grades} />
+          <ProtectedRoutes exact path="/courses/:courseId/student/grades" component={StudentGrades} />
+
           <Route component={NotFound} />
       </Switch>
     </Router>

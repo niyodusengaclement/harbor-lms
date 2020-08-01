@@ -40,6 +40,7 @@ const Submissions = (props) => {
     const data = submission[0];
     data.grade = marks;
     data.comment = comment;
+    data.sectionId = 'S120-e9X13';
     props.sendGrades(data);
     handleShow();
   }

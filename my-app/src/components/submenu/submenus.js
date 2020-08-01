@@ -80,6 +80,6 @@ export const student = [
   },
   {
     name: 'Grades',
-    url: '/grades',
+    url: '/student/grades',
   },
 ]
