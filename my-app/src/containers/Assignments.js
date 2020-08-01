@@ -7,7 +7,7 @@ import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createA
 import { connect } from "react-redux";
 import { Spinner, Dropdown } from "react-bootstrap";
 import { getDateAndTime } from "../helpers/getDate";
-import { getCourses } from "../redux/actions/coursesActions";
+import { getCourses, getCourseSections } from "../redux/actions/coursesActions";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import TableLayout from "../components/TableLayout";
@@ -16,14 +16,21 @@ const Assignments = (props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState({});
   const [filtered, setFilter] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   
   const { assignments, courses, userProfile, match: { params }  } = props;
   const { role } = userProfile;
 
+  const fetch = () => {
+    setIsLoading(true)
+    props.getCourseSections(params.courseId, setIsLoading);
+  }
+  
   useEffect(() => {
     const { match: { params }  } = props;
     props.fetchAssignments(params.courseId);
     props.fetchCourses();
+    fetch();
   }, []);
 
   useEffect(() => {
@@ -75,6 +82,9 @@ const Assignments = (props) => {
   ];
   const course = courses.values.length > 0 ? courses.values.filter(({id}) => id === params.courseId) : [];
   const title = !course[0] ? '' : `${course[0].name} > Assignments`;
+
+  localStorage.setItem('courseId', params.courseId);
+  if (course.length > 0) localStorage.setItem('courseName', course[0].name);
 
   const loading  = assignments.isLoading ? 
         <Spinner
@@ -166,6 +176,7 @@ const mapStateToProps = ({ assignments, courses, firebase }) => ({
   courses,
   assignments,
   userProfile: firebase.profile,
+  sections: courses.sections
 });
 
 export default connect(mapStateToProps, {
@@ -173,5 +184,6 @@ export default connect(mapStateToProps, {
   fetchCourses: getCourses,
   pubOrUnpub: publishOrUnpublishAssignment,
   delete: deleteAssignment,
-  fetchSubmissions: getSubmissions
+  fetchSubmissions: getSubmissions,
+  getCourseSections: getCourseSections
 })(Assignments);

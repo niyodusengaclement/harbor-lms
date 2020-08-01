@@ -4,7 +4,7 @@ import "../assets/styles/containers/courseSection.scss";
 import Modal from "../components/Modal";
 import Btn from "../components/Btn";
 import { connect } from "react-redux";
-import { getCourseSections } from "../redux/actions/coursesActions";
+import { getCourseSections, getCourses } from "../redux/actions/coursesActions";
 import { Spinner } from "react-bootstrap";
 import TableLayout from "../components/TableLayout";
 import DropDown from "../components/DropDown";
@@ -16,9 +16,11 @@ const CourseSection = (props) => {
   const [isPageRefreshed,setIsPageRefreshed] = useState('');
   const [dropDownState, setDropDownState] = useState(false);
 
+  const { courses, match: { params }  } = props;
   useEffect(() => {
     setIsLoading(true)
-    props.getCourseSections(localStorage.getItem("courseId"),setIsLoading);
+    props.fetchCourses();
+    props.getCourseSections(params.courseId, setIsLoading);
   }, []);
 
   useEffect(() => {
@@ -28,6 +30,11 @@ const CourseSection = (props) => {
   }, [props.actionMessage,props.sections]);
 
   const handleClick = () => toggle(!isToggled);
+
+  const course = courses.length > 0 ? courses.filter(({id}) => id === params.courseId) : [];
+
+  localStorage.setItem('courseId', params.courseId);
+  if (course.length > 0) localStorage.setItem('courseName', course[0].name);
 
   if(isPageRefreshed){
      window.location.reload(false);
@@ -94,6 +101,7 @@ const CourseSection = (props) => {
 };
 const mapStateToProps = ({ courses }) => {
   return {
+    courses: courses.values,
     sections: courses.sections,
     actionMessage: courses.message,
   };
@@ -101,6 +109,7 @@ const mapStateToProps = ({ courses }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getCourseSections: (courseId,setIsLoading,setIsPageRefreshed) => dispatch(getCourseSections(courseId,setIsLoading,setIsPageRefreshed)),
+    fetchCourses: () => dispatch(getCourses()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CourseSection);

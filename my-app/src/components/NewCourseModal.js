@@ -6,7 +6,6 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createCourse } from "../redux/actions/coursesActions";
 import { connect } from "react-redux";
-import AlertComponent from './Alert';
 import { getProfile } from "../helpers/utils";
 import { toast } from "react-toastify";
 

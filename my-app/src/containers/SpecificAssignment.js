@@ -93,7 +93,6 @@ const SpecificAssignment = (props) => {
       // props.sendSubmission(data);
     }
   }
-  console.log(courses)
 
   const Loading  = assignments.isLoading ? 
         <Spinner
@@ -126,7 +125,7 @@ const SpecificAssignment = (props) => {
               <td> 
                 <Link className="black-links" to={`/courses/${params.courseId}/assignments/${params.assignmentId}/submissions/${sub.id}`} >{sub.fullName}</Link>
               </td>
-              <td>{sub.section}</td>
+              <td>{sub.sectionId}</td>
               <td>{getDateAndTime(sub.submittedOn)}</td>
               <td>{sub.grade}</td>
             </tr>
