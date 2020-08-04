@@ -11,7 +11,7 @@ const Submenu = ({ page, userProfile }) => {
   return (
     <>
       <div className="col-md-2">
-        <div className="card p-4 ">
+        <div className="card p-4 submenu-small">
             {
               menus.map(({ name, url }, idx) => 
                 <p key={idx} className={page === name ? 'submenu isActive' : 'submenu'}>
