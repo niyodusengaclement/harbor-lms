@@ -12,10 +12,6 @@ export const instructor = [
     url: '/syllabus',
   },
   {
-    name: 'Files',
-    url: '/files',
-  },
-  {
     name: 'Members',
     url: '/members',
   },
@@ -57,10 +53,6 @@ export const student = [
   {
     name: 'Syllabus',
     url: '/syllabus',
-  },
-  {
-    name: 'Files',
-    url: '/files',
   },
   {
     name: 'Members',

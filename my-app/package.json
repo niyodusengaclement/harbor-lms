@@ -7,6 +7,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
+    "@material-ui/core": "^4.11.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -16,6 +17,7 @@
     "dotenv": "^8.2.0",
     "firebase": "^7.16.1",
     "install": "^0.13.0",
+    "javascript-time-ago": "^2.0.13",
     "lodash": "^4.17.19",
     "node-sass": "^4.14.1",
     "npm": "^6.14.6",
@@ -34,7 +36,8 @@
     "react-toastify": "^6.0.8",
     "redux": "^4.0.5",
     "redux-firestore": "^0.13.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
