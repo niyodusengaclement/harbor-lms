@@ -88,7 +88,7 @@ const Grades = (props) => {
         </Form.Control>
       </Form.Group>
      </div>
-      <div className={user.role === 'student' ? 'carded-table-scroll' : 'carded-table-scroll large-table' }> 
+      <div className="carded-table-scroll large-table" > 
     {/* Table  Start*/}
       <TableLayout headers={['Name', ...headers, 'Current Marks', 'Percentage']}>      
           {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import "../assets/styles/card.scss";
 
-const ModalLayout = ({ children, handleShow, show, header, handleClick }) => {
+const ModalLayout = ({ children, handleShow, show, header, handleClick, buttonName }) => {
   
     const handleClose = () => handleShow();
   
@@ -17,7 +17,7 @@ const ModalLayout = ({ children, handleShow, show, header, handleClick }) => {
           {children}
           <Modal.Footer>
             <button className="green-btn" onClick={handleClick}>
-              Submit
+              {buttonName ? buttonName : 'Submit'}
             </button>
           </Modal.Footer>
         </Modal>
