@@ -11,7 +11,11 @@ import {
   UPDATE_COURSE_SECTION_SUCCESS,
   UPDATE_COURSE_SECTION_FAILURE,
   DELETE_COURSE_SECTION_SUCCESS,
-  DELETE_COURSE_SECTION_FAILURE,
+  UPDATE_COURSE_MEMBERS,
+  GET_COURSE_MEMBERS,
+  GET_COURSE_MEMBERS_ERROR,
+  ACTION_START
+
 } from "./actionTypes";
 import actionCreator from "./actionCreator";
 import { toast } from "react-toastify";
@@ -227,6 +231,57 @@ export const deleteCourseSection = (courseId, sectionId) => {
     } catch (error) {
       console.log("error : ", error);
 
+    }
+  };
+};
+
+export const updateCourseMembers = (courseId, arrayOfMembers) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firestore = getFirestore();
+    const course = firestore.collection("courses").doc(courseId);
+    arrayOfMembers.forEach(async (member) => {
+      course
+      .collection("members")
+      .add(member)
+      .then(() => {
+          return dispatch(actionCreator(UPDATE_COURSE_MEMBERS, arrayOfMembers));
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        return dispatch(actionCreator(GET_COURSE_MEMBERS_ERROR, err));
+      });
+    });
+  };
+};
+
+export const getCourseMembers = () => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    try {
+      dispatch(actionCreator(ACTION_START));
+      const firestore = getFirestore();
+      dispatch(actionCreator(CREATE_COURSE_START));
+      const allMembers = [];
+      const courseRef = firestore.collection("courses").doc(localStorage.getItem('courseId'));
+
+      const crs = await courseRef.collection("members").get();
+      if(crs.empty) {
+        return dispatch(actionCreator(GET_COURSE_MEMBERS, []));
+      }
+      crs.forEach((doc) => {
+        const data = doc.data()
+        data.id = doc.id;
+        allMembers.push(data)
+      });
+      return dispatch(actionCreator(GET_COURSE_MEMBERS, allMembers));
+    } catch (err) {
+      toast.error(err, {
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      return dispatch(actionCreator(GET_COURSE_MEMBERS_ERROR, err));
     }
   };
 };

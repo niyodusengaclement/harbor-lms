@@ -1,45 +1,34 @@
 import { SEND_INVITATIONS,SEND_INVITATIONS_ERROR } from "./actionTypes";
+import actionCreator from "./actionCreator";
+import { toast } from "react-toastify";
 
-export const sendInvitations = (sender, course, members) => {
+export const sendInvitations = (section, course, members) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
-  try {
-      const firestore = getFirestore();
-
-      members.forEach(async (member) => {
-        let invitations = await firestore.collection("notifications").doc();
-        await invitations.set({
-          sender,
-          receiver: member,
-          type: "invite",
-          message: `${sender} invited you to enroll in ${course}`,
-          status: "pending",
+    
+    const firestore = getFirestore();
+    await members.forEach( async (member) => {
+      const data = {
+        receiver: member.id,
+        type: "invitation",
+        message: `You are invited to enroll in ${course}, section ${section}`,
+        status: "pending",
+        unread: true,
+      }
+      return await firestore
+      .collection("notifications")
+      .add(data)
+      .then((doc) => {
+          const res = data;
+          res.id = doc.id;
+          return dispatch(actionCreator(SEND_INVITATIONS, res));
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-center",
+          hideProgressBar: true,
         });
-        const snapshot = await firestore
-          .collection("users")
-          .where("fullName", "==", member)
-          .get();
-        let userDocumentId;
-        snapshot.forEach((snap) => (userDocumentId = snap.id));
-        await firestore
-          .collection("users")
-          .doc(userDocumentId)
-          .collection("invitations")
-          .doc()
-          .set({
-            invitationId: invitations.id,
-            message: `${sender} invited you to enroll in ${course}`,
-            read: false,
-          });
+        return dispatch(actionCreator(SEND_INVITATIONS_ERROR, err));
       });
-      dispatch({
-        type: SEND_INVITATIONS,
-        payload: members,
-      });
-    } catch (error) {
-      dispatch({
-        type: SEND_INVITATIONS_ERROR,
-        error,
-      });
-    };
+    });
   }
 };

@@ -8,7 +8,10 @@ import {
   GET_COURSE_SECTIONS,
   GET_COURSE_SPECIFIC_SECTION,
   UPDATE_COURSE_SECTION_SUCCESS,
-  UPDATE_COURSE_SECTION_FAILURE
+  UPDATE_COURSE_SECTION_FAILURE,
+  UPDATE_COURSE_MEMBERS,
+  GET_COURSE_MEMBERS,
+  ACTION_START
 } from "../actions/actionTypes";
 import {updateArrOfObj} from '../../helpers/utils';
 
@@ -16,21 +19,21 @@ import {updateArrOfObj} from '../../helpers/utils';
 const initialState = {
   isLoading: false,
   isLoaded: false,
-  user: {
-    name: "John Doe",
-    role: "Instructor",
-    schoolName: "Akilah University",
-    imageUrl: null,
-    schoolLogo: null,
-  },
   values: [],
   sections: [],
-  section: {}
+  section: {},
+  members: [],
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case CREATE_COURSE_START:
+      return {
+        ...state,
+        isLoaded: false,
+        isLoading: true,
+      };
+    case ACTION_START:
       return {
         ...state,
         isLoaded: false,
@@ -79,16 +82,29 @@ export default (state = initialState, { type, payload }) => {
           ...state,
           section: payload
         };
-        case UPDATE_COURSE_SECTION_SUCCESS:
+      case UPDATE_COURSE_SECTION_SUCCESS:
+      return {
+        ...state,
+        section: payload
+      };
+      case UPDATE_COURSE_SECTION_FAILURE:
+      return {
+        ...state,
+        error: payload
+      }
+      case UPDATE_COURSE_MEMBERS:
         return {
           ...state,
-          section: payload
+          members: {
+            ...state.members,
+            ...payload
+          },
         };
-        case UPDATE_COURSE_SECTION_FAILURE:
-        return {
+      case GET_COURSE_MEMBERS:
+        return{
           ...state,
-          error: payload
-        }
+          members: payload
+        };
 
     default:
       return state;

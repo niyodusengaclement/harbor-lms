@@ -1,12 +1,13 @@
-import { GET_STUDENTS,GET_STUDENTS_FAILURE } from "./actionTypes";
+import { GET_STUDENTS,GET_STUDENTS_FAILURE, ACTION_START } from "./actionTypes";
+import actionCreator from "./actionCreator";
 
 export const getStudents = () => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     const students = [];
+    dispatch(actionCreator(ACTION_START));
     return firestore
       .collection("users")
-      // .where('role', '==', 'student')
       .get()
       .then((res) => {
         res.forEach((doc) => {
@@ -14,17 +15,10 @@ export const getStudents = () => {
           data.id = doc.id;
           students.push(data);
         });
-        console.log("studetns: ", students);
-        return dispatch({
-          type: GET_STUDENTS,
-          payload: students,
-        });
+        return dispatch(actionCreator(GET_STUDENTS, students));
       })
       .catch((error) => {
-          return dispatch({
-            type: GET_STUDENTS_FAILURE,
-            error,
-        });
+        return dispatch(actionCreator(GET_STUDENTS_FAILURE, error));
       });
   };
 };
