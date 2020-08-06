@@ -31,11 +31,6 @@ const CourseSection = (props) => {
 
   const handleClick = () => toggle(!isToggled);
 
-  const course = courses.length > 0 ? courses.filter(({id}) => id === params.courseId) : [];
-
-  localStorage.setItem('courseId', params.courseId);
-  if (course.length > 0) localStorage.setItem('courseName', course[0].name);
-
   if(isPageRefreshed){
      window.location.reload(false);
      setIsPageRefreshed('');

@@ -15,11 +15,7 @@ const StudentGrades = (props) => {
     props.getSubmissionsByStudentId(localStorage.getItem('rems_user_id'))
   }, []);
 
-  const course = courses.values.length > 0 ? courses.values.filter(({id}) => id === params.courseId) : [];
-  const title = !course[0] ? '' : `${course[0].name} > Grades`;
-
-  localStorage.setItem('courseId', params.courseId);
-  if (course.length > 0) localStorage.setItem('courseName', course[0].name);
+  const title = `${localStorage.getItem('courseName')} > Grades`;
 
   const loading  = assignments.isLoading ? 
         <Spinner

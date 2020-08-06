@@ -3,14 +3,10 @@
 .chat {
   position: fixed;
   height: 59%;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
   width: 548px;
 }
-.chat:hover {
-  overflow: auto;
-}
-
 .chat-card {
   border: 2px solid #dedede;
   background-color: #ffffff;

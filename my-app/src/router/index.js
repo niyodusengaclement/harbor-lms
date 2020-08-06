@@ -25,6 +25,7 @@ import Submissions from "../containers/Submissions";
 import Grades from "../containers/Grades";
 import StudentGrades from "../containers/StudentGrades";
 import Discussions from "../containers/Discussions";
+import Notifications from "../containers/Notifications";
 
 const App = () => {
   return (
@@ -55,6 +56,7 @@ const App = () => {
           <ProtectedRoutes exact path="/courses/:courseId/grades" component={Grades} />
           <ProtectedRoutes exact path="/courses/:courseId/student/grades" component={StudentGrades} />
           <ProtectedRoutes exact path="/courses/:courseId/discussions" component={Discussions} />
+          <ProtectedRoutes exact path="/notifications" component={Notifications} />
 
           <Route component={NotFound} />
       </Switch>

@@ -6,9 +6,11 @@ import { connect } from "react-redux";
 import { getCourses } from "../redux/actions/coursesActions";
 import { Spinner } from "react-bootstrap";
 import NewCourseModal from "../components/NewCourseModal";
+import { getProfile } from "../helpers/utils";
+import StudentDashboard from "../components/dashboard/StudentDashboard";
+import InstructorDashboard from "../components/dashboard/InstructorDashboard";
 
 const Dashboard = (props) => {
-  // const { role }
   const toggleCourseModal = () => {
     const el = document.getElementById('newCourseModal');
     const el1 = el.style.display === 'block' ? el.style.display = 'none' : el.style.display = 'block';
@@ -23,58 +25,25 @@ const Dashboard = (props) => {
 
   useEffect(() => { props.fetchCourses(); }, []);
   const { values, isLoading } = props.courses;
-  const publishedCourses = values.length > 0 ? values.filter(({ isPublished }) => isPublished) : [];
-  const unPublishedCourses = values.length > 0 ? values.filter(({ isPublished }) => !isPublished) : [];
+  const { role } = getProfile();
+  const { profile } = props;
   return (
     <div className="wrapper">
       <TopHeader page='Dashboard' buttons={buttons} />
       <NewCourseModal />
-      {/* Main panel */}
-			<div className="main-panel">
-				<div className="content">
-					<div className="container-fluid">
-						<h4 className="page-title pb-4">Published</h4>
-
-						<div className="row">
-              {
-                publishedCourses.length > 0 ? publishedCourses.map((course, idx) => 
-                  <CourseCard
-                    key={idx}
-                    course={course}
-                  />
-                ) :<p className="pl-3">You haven't published any course  yet</p>
-              }
-						</div>
-						{/* End of row */}
-
-						<h4 className="page-title pb-4">Unpublished</h4>
-            
-						<div className="row">
-      <Spinner
-            animation="border"
-            variant="primary"
-            className={isLoading ? 'spinner--position__center' : 'hide'}
-            />
-              {
-                unPublishedCourses.length > 0 ? unPublishedCourses.map((course, idx) => 
-                  <CourseCard
-                    key={idx}
-                    course={course}
-                  />
-                ) : <p className="pl-3">You don't have unpublished course</p>
-              }
-						</div>
-            {/* End of row */}
-					</div>
-				</div>
-			</div>
-			{/* END */}
+      {
+        role === 'student' || profile.role === 'student' ?
+        <StudentDashboard role={role? role : profile.role} profile={profile} />
+        :
+        <InstructorDashboard courses={props.courses} />
+      }
     </div>
   );
 };
 
-const mapStateToProps = ({ courses }) => ({
-  courses
+const mapStateToProps = ({ courses, firebase }) => ({
+  courses,
+  profile: firebase.profile,
 })
 
 export default connect(mapStateToProps, {

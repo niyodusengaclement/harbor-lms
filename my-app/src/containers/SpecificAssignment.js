@@ -5,7 +5,7 @@ import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createA
 import { connect } from "react-redux";
 import { Spinner, Dropdown, Button } from "react-bootstrap";
 import { getDateAndTime, dueDateCalculator } from "../helpers/getDate";
-import { getCourses } from "../redux/actions/coursesActions";
+import { getCourses, getCourseSections } from "../redux/actions/coursesActions";
 import ModalLayout from "../components/ModalLayout";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -17,20 +17,27 @@ const SpecificAssignment = (props) => {
   const [ text, setText] = useState('');
   const [ url, setUrl] = useState('');
   const [ file, setFile ] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { assignments, courses, userProfile, match: { params }  } = props;
+  const { assignments, courses, userProfile, sections, match: { params }  } = props;
   const { role, fullName } = userProfile;
   const studentId = localStorage.getItem('rems_user_id');
-  const course = courses.values.length > 0 ? courses.values.filter(({id}) => id === params.courseId) : [];
   const singleAssignment = assignments.values.length > 0 ? assignments.values.filter(({id}) => id === params.assignmentId) : [];
   const submission = assignments.submissions.length > 0 ? assignments.submissions.filter((sub) => sub.studentId === studentId && sub.assignmentId === params.assignmentId) : [];
-  const title = !course[0] ? '' : `${course[0].name} > Assignments`;
+  const title = `${localStorage.getItem('courseName')} > Assignments > ${singleAssignment[0] ? singleAssignment[0].assignmentName : ''}`;
 
   useEffect(() => {
     props.fetchAssignments(params.courseId);
     props.fetchCourses();
     props.fetchSubmissions(params.assignmentId);
+    fetch();
   }, []);
+
+  const fetch = () => {
+    setIsLoading(true)
+    props.getCourseSections(params.courseId, setIsLoading);
+  }
+  
 
   const handleShow = () => setShow(!show);
   const handleClick = () => {
@@ -94,6 +101,12 @@ const SpecificAssignment = (props) => {
     }
   }
 
+  const findSectionName = (id) => {
+    const found = sections.find(({sectionId}) => sectionId === id);
+    return found.sectionName;
+  }
+
+
   const Loading  = assignments.isLoading ? 
         <Spinner
           animation="border"
@@ -101,7 +114,7 @@ const SpecificAssignment = (props) => {
           className={assignments.isLoading ? 'spinner--position__center' : 'hide'}
         />
         : <p className="pl-3">Data not found</p>;
-        
+
   return (
     <SpecificCourse page={title} submenu="Assignments">
       {
@@ -125,7 +138,7 @@ const SpecificAssignment = (props) => {
               <td> 
                 <Link className="black-links" to={`/courses/${params.courseId}/assignments/${params.assignmentId}/submissions/${sub.id}`} >{sub.fullName}</Link>
               </td>
-              <td>{sub.sectionId}</td>
+              <td>{findSectionName(sub.sectionId)}</td>
               <td>{getDateAndTime(sub.submittedOn)}</td>
               <td>{sub.grade}</td>
             </tr>
@@ -247,6 +260,7 @@ const mapStateToProps = ({ assignments, courses, firebase }) => ({
   courses,
   assignments,
   userProfile: firebase.profile,
+  sections: courses.sections
 });
 
 export default connect(mapStateToProps, {
@@ -254,5 +268,6 @@ export default connect(mapStateToProps, {
   fetchCourses: getCourses,
   sendSubmission: submitAssignment,
   fetchSubmissions: getSubmissions,
-  updateSubmission: updateSubmission
+  updateSubmission: updateSubmission,
+  getCourseSections: getCourseSections,
 })(SpecificAssignment);

@@ -8,6 +8,10 @@ const CourseCard = (props) => {
   const updateState = (data) => {
     props.update(data);
   }
+  const setCourseToStorage = (course) => {
+    localStorage.setItem('courseName', course.name);
+    localStorage.setItem('courseId', course.id);
+  }
 
   return ( 
     <>
@@ -21,7 +25,7 @@ const CourseCard = (props) => {
             <button className="float-right publish-unpublish-btn" onClick={(e) => updateState(props.course)}><span>{props.course.isPublished ? 'Unpublish' : 'Publish'}</span></button>
           </div>
           <div className="card-block p-3">
-            <p className="course-title"><Link className="black-links" to={`courses/${props.course.id}/assignments`}>{props.course.name}</Link></p>
+            <p className="course-title"><Link className="black-links" onClick={() => setCourseToStorage(props.course)} to={`courses/${props.course.id}/assignments`}>{props.course.name}</Link></p>
             <p className="card-text card-font">
             {
               !props.course.description ? 

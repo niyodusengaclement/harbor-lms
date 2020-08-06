@@ -6,11 +6,27 @@ import Indent50 from '../../assets/images/icons/Indent50.png';
 import schoolImg from '../../assets/images/circle50.png';
 import { NavLink } from "react-router-dom";
 import { instructor, student } from "./menu";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
+import Badge from '@material-ui/core/Badge';
+import { useFirestoreConnect } from "react-redux-firebase";
+import { getProfile } from "../../helpers/utils";
 
 const Sidebar = (props) => {
 	const {userProfile} = props;
 	const menus = userProfile.role === 'instructor' ? instructor : student;
+
+	useFirestoreConnect({
+    collection: `notifications`,
+    storeAs: 'notifications'
+  });
+  const notifications = useSelector(({firestore}) => firestore.data.notifications);
+  const allNotifications = [];
+
+  const { uid } = getProfile();
+  if(notifications) {
+    Object.values(notifications).map((msg) => allNotifications.push(msg));
+  }
+	const count = allNotifications.length > 0 ? allNotifications.filter(({receiver, unread}) => receiver === uid && unread).length : 0;
  
   return (
     <div >
@@ -24,12 +40,13 @@ const Sidebar = (props) => {
 							<span className="">{userProfile.school} </span>
 						</div>
 					<ul className="nav">
+
 						{
 							menus.map((menu, idx) => 
 							
 							<li className="nav-item" key={idx}>
 							<NavLink to={menu.url} activeStyle={{color: "#FFCE31"}}>
-								<FontAwesomeIcon icon={menu.icon} />
+							<Badge color="secondary" badgeContent={menu.name === 'Notifications' ? count : 0}><FontAwesomeIcon icon={menu.icon} /></Badge>
 								<p className="pl-2">{menu.name}</p>
 							</NavLink>
 							</li>
