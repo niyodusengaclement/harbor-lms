@@ -52,11 +52,8 @@
   position: fixed;
   width: 700px;
   height: 65%;
-  overflow-y: hidden;
-  overflow-x: hidden;
-}
-.carded-table-scroll:hover {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 .large-table {
   width: 900px !important;
@@ -170,6 +167,16 @@
 
 .submenu-small {
   height: 550px;
+}
+
+.large-card {
+  position: fixed;
+  height: 550px;
+  width: 358px;
+  overflow-y: auto;
+}
+.large-card-content {
+  width: 350px;
 }
 
 @media screen and (max-width: 1001px) {

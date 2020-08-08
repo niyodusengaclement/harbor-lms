@@ -235,16 +235,37 @@ export const deleteCourseSection = (courseId, sectionId) => {
   };
 };
 
-export const updateCourseMembers = (courseId, arrayOfMembers) => {
+export const addCourseMembers = (courseId, courseName, sectionName, arrayOfMembers) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
-    const course = firestore.collection("courses").doc(courseId);
     arrayOfMembers.forEach(async (member) => {
-      course
+      member.courseId = courseId;
+      firestore
       .collection("members")
       .add(member)
-      .then(() => {
+      .then( async (doc) => {
+        const { id, others } = member;
+        const data = {
+          ...others,
+          receiver: id,
+          docId: doc.id,
+          type: "Invitation",
+          message: `You are invited to enroll in ${courseName}, section ${sectionName}`,
+          status: "pending",
+          unread: true,
+          courseId,
+          time: new Date().setTime(new Date())
+        }
+        return await firestore
+        .collection("notifications")
+        .add(data)
+        .then((doc) => {
+          toast.success('Invitation sent successfully', {
+            position: 'top-center',
+            hideProgressBar: true,
+          })
           return dispatch(actionCreator(UPDATE_COURSE_MEMBERS, arrayOfMembers));
+        })
       })
       .catch((err) => {
         toast.error(err, {
@@ -257,16 +278,14 @@ export const updateCourseMembers = (courseId, arrayOfMembers) => {
   };
 };
 
-export const getCourseMembers = () => {
+export const getAllMembers = () => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {
       dispatch(actionCreator(ACTION_START));
       const firestore = getFirestore();
       dispatch(actionCreator(CREATE_COURSE_START));
       const allMembers = [];
-      const courseRef = firestore.collection("courses").doc(localStorage.getItem('courseId'));
-
-      const crs = await courseRef.collection("members").get();
+      const crs = await firestore.collection("members").get();
       if(crs.empty) {
         return dispatch(actionCreator(GET_COURSE_MEMBERS, []));
       }

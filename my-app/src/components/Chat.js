@@ -9,6 +9,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { getCourseSections } from '../redux/actions/coursesActions';
 import { saveChat, getChats } from '../redux/actions/chatActions';
+import { getAllMembers } from '../redux/actions/coursesActions';
 import Avatar from '@material-ui/core/Avatar';
 import '../assets/styles/components/chat.scss';
 import { useFirestoreConnect } from "react-redux-firebase";
@@ -17,7 +18,7 @@ const Chat = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [section, setSection] = useState(null)
   const [message, setMessage] = useState('');
-  const { courses, chat } = props;
+  const { courses, chat, profile } = props;
   const courseId = localStorage.getItem('courseId');
   TimeAgo.addLocale(en);
   const timeAgo = new TimeAgo('en-US');
@@ -25,12 +26,14 @@ const Chat = (props) => {
   useEffect(() => {
     setIsLoading(true);
     props.getCourseSections(courseId, setIsLoading);
+    props.getAllMembers();
   }, []);
 
   const user = JSON.parse(localStorage.getItem('rems_user_profile'));
   const userId = localStorage.getItem('rems_user_id');
+  const studentSections = courses.members.length > 0 ? courses.members.filter(({studentUniqueNumber, status}) => studentUniqueNumber === profile.studentUniqueNumber && status === 'accepted') : [];
 
-  const { sections } = courses;
+  const sections = profile.role !== 'student' ? courses.sections : studentSections ;
   useFirestoreConnect({
     collection: `chats`,
     storeAs: 'chats'
@@ -153,13 +156,15 @@ const Chat = (props) => {
   );
 }
 
-const mapStateToProps = ({ courses, chat }) => ({
+const mapStateToProps = ({ courses, chat, firebase }) => ({
   courses,
   chat,
+  profile: firebase.profile,
 });
 
 export default connect(mapStateToProps, {
   getCourseSections: getCourseSections,
   sendMessage: saveChat,
   getMessages: getChats,
+  getAllMembers: getAllMembers,
 })(Chat);

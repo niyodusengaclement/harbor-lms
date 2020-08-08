@@ -16,14 +16,12 @@ const Submissions = (props) => {
 
   const { assignments, courses, userProfile, match: { params }  } = props;
   const { role, fullName } = userProfile;
-  const course = courses.values.length > 0 ? courses.values.filter(({id}) => id === params.courseId) : [];
   const submission = assignments.submissions.length > 0 ? assignments.submissions.filter(({id}) => id === params.submissionId) : [];
   const thisAssignment = assignments.values.length > 0 ? assignments.values.filter(({id}) => id === params.assignmentId) : [];
-  const title = !course[0] ? '' : `${course[0].name} > Assignments`;
+  const title = `${localStorage.getItem('courseName')} > Assignments > Submissions`;
 
   useEffect(() => {
     props.fetchAssignments(params.courseId);
-    // props.fetchCourses();
     if(role === 'instructor') {
       props.fetchSubmissions(params.assignmentId);
     }
@@ -40,7 +38,6 @@ const Submissions = (props) => {
     const data = submission[0];
     data.grade = marks;
     data.comment = comment;
-    data.sectionId = 'S120-e9X13';
     props.sendGrades(data);
     handleShow();
   }
@@ -72,7 +69,7 @@ const Submissions = (props) => {
       {
         !submission[0] ? 
         Loading
-        : role === 'instructor' ?
+        : role === 'instructor' && submission[0] ?
         <>
         <div className="col-md-8">
       

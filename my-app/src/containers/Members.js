@@ -2,16 +2,16 @@ import React,{useState,useEffect} from "react";
 import SpecificCourse from "../components/SpecificCourse";
 import "../assets/styles/containers/members.scss";
 import {getStudents} from '../redux/actions/studentsActions';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import '../assets/styles/styles.scss';
 import '../assets/styles/card.scss';
-import {getCourseMembers, updateCourseMembers, getCourseSections} from '../redux/actions/coursesActions';
+import {getCourseMembers, addCourseMembers, getCourseSections} from '../redux/actions/coursesActions';
 import ModalLayout from "../components/ModalLayout";
 import Select from 'react-select'
-import { sendInvitations } from "../redux/actions/instructorActions";
 import { toast } from "react-toastify";
 import TableLayout from "../components/TableLayout";
 import { Spinner } from "react-bootstrap";
+import { useFirestoreConnect } from "react-redux-firebase";
 
 const Members = (props) => {
   const [ show, setShow ] = useState(false);
@@ -24,13 +24,28 @@ const Members = (props) => {
   useEffect(()=> {
      props.getStudents();
      props.getCourseSections(courseId, setIsLoading);
-     props.getMembers(courseId);
   },[]);
 
+  useFirestoreConnect({
+    collection: `members`,
+  });
+  const members = useSelector(({firestore}) => firestore.data.members);
+  const registeredMembers = [];
+  const allMembersKeys = [];
+
+  if(members) {
+    Object.entries(members).map((values) => allMembersKeys.push(values));
+    const array = allMembersKeys.length > 0 ? allMembersKeys.map((arr) => {
+      const value = {
+        id: arr[0],
+        ...arr[1]
+      }
+      return registeredMembers.push(value);
+    }) : [];
+  }
+  const courseMembers = registeredMembers.length > 0 ? registeredMembers.filter((mbr) => mbr.courseId === courseId) : [];
   const handleShow = () => setShow(!show);
   
-  console.log('memebers', props.courses);
-
   const onError = (error) => {
     toast.error(error, {
       position: "top-center",
@@ -49,15 +64,9 @@ const Members = (props) => {
       }
       return invitee
     }): [];
-    props.updateCourseMembers(courseId, invitees);
-    props.sendInvitations(section.label, courseName, invitees);
+    props.addCourseMembers(courseId, courseName, section.label, invitees);
     setMultiChange(null);
     setSection(null);
-    toast.success('Invitation sent successfully', {
-      position: 'top-center',
-      hideProgressBar: true,
-    })
-
   };
 
   const allMembers = props.allMembers.length > 0 ? props.allMembers.map((mbr) => {
@@ -82,10 +91,15 @@ const Members = (props) => {
     className={props.courses.isLoading ? 'spinner--position__center' : 'hide'}
   />
   : "No Data found";
+  const user = JSON.parse(localStorage.getItem('rems_user_profile'));
 
   return (
     <SpecificCourse page={`${localStorage.getItem('courseName')} > Members`} submenu="Members">
-      <button name="invite" id="invite" onClick={handleShow} className="members--btn__top blue-btn" > Invite members </button>
+      {
+        user.role === 'instructor' ?
+          <button name="invite" id="invite" onClick={handleShow} className="members--btn__top blue-btn" > Invite members </button>
+        : null
+      }
 
       <ModalLayout handleShow={handleShow} handleClick={handleClick} show={show} header="Invite members" buttonName="Invite">
         <div className="p-3">
@@ -123,7 +137,7 @@ const Members = (props) => {
           {/* Table  Start*/}
           <TableLayout headers={['Name', 'Member ID', 'Role', 'Section', 'Status']}> 
           {
-            props.members.length > 0 ? props.members.map(({fullName, studentUniqueNumber, email, role, sectionName, status }, idx) =>
+            courseMembers.length > 0 ? courseMembers.map(({fullName, studentUniqueNumber, email, role, sectionName, status }, idx) =>
             <tr key={idx}>
               <td>{fullName}</td>
               <td>{studentUniqueNumber ? studentUniqueNumber : email}</td>
@@ -132,7 +146,7 @@ const Members = (props) => {
               <td>{status}</td>
             </tr>
             )
-            : loading
+            : "No data found"
 
           }
           </TableLayout>
@@ -157,7 +171,5 @@ const mapStateToProps = ({ students, courses }) => ({
 export default connect(mapStateToProps, {
   getCourseSections: getCourseSections,
   getStudents: getStudents,
-  getMembers: getCourseMembers,
-  sendInvitations: sendInvitations,
-  updateCourseMembers: updateCourseMembers
+  addCourseMembers: addCourseMembers
 })(Members)

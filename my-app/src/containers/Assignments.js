@@ -7,7 +7,7 @@ import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createA
 import { connect } from "react-redux";
 import { Spinner, Dropdown } from "react-bootstrap";
 import { getDateAndTime } from "../helpers/getDate";
-import { getCourses, getCourseSections } from "../redux/actions/coursesActions";
+import { getCourses, getCourseSections, getAllMembers } from "../redux/actions/coursesActions";
 import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import TableLayout from "../components/TableLayout";
@@ -18,8 +18,9 @@ const Assignments = (props) => {
   const [filtered, setFilter] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  const { assignments, courses, userProfile, match: { params }  } = props;
+  const { assignments, courses, sections, userProfile, match: { params }  } = props;
   const { role } = userProfile;
+  const { members } = props.courses;
 
   const fetch = () => {
     setIsLoading(true)
@@ -30,12 +31,9 @@ const Assignments = (props) => {
     const { match: { params }  } = props;
     props.fetchAssignments(params.courseId);
     props.fetchCourses();
+    props.getAllMembers();
     fetch();
   }, []);
-
-  useEffect(() => {
-    setFilter(assignments.values);
-  }, [assignments.values]);
 
 	const hideOrShow = () => {
     const el = document.getElementById('newAssignmentModal');
@@ -59,8 +57,16 @@ const Assignments = (props) => {
       props.delete(id);
     }
   }
+  const memberSections = members.length > 0 ? members.filter(({studentUniqueNumber, status}) => studentUniqueNumber === userProfile.studentUniqueNumber && status === 'accepted'): [];
+  const allAssignments = role === 'student' ? assignments.values.filter(({isPublished, section }) => isPublished === true && section === memberSections[0].sectionId) : assignments.values;
+  useEffect(() => {
+    setFilter(allAssignments);
+  }, [role, memberSections]);
 
-  const allAssignments = role === 'student' ? assignments.values.filter(({isPublished}) => isPublished === true) : assignments.values;
+  const findSectionName = (id) => {
+    const found = sections.find(({sectionId}) => sectionId === id);
+    return found.sectionName;
+  }
 
   const onSearchHandler = (e) => {
     const searchInput = e.target.value.toLowerCase();
@@ -80,11 +86,7 @@ const Assignments = (props) => {
       clickHandler: toogleAssModal
     },
   ];
-  const course = courses.values.length > 0 ? courses.values.filter(({id}) => id === params.courseId) : [];
-  const title = !course[0] ? '' : `${course[0].name} > Assignments`;
-
-  localStorage.setItem('courseId', params.courseId);
-  if (course.length > 0) localStorage.setItem('courseName', course[0].name);
+  const title = `${localStorage.getItem('courseName')} > Assignments`;
 
   const loading  = assignments.isLoading ? 
         <Spinner
@@ -121,7 +123,7 @@ const Assignments = (props) => {
                 <td> 
                 <Link className="black-links" to={`/courses/${params.courseId}/assignments/${ass.id}`} >{ass.assignmentName}</Link>
                 </td>
-                <td>{ass.section}</td>
+                <td>{findSectionName(ass.section)}</td>
                 <td>{getDateAndTime(ass.endDate)}</td>
                 <td>
                 <span className={ass.isPublished ? 'badge badge-success bagde-published ' : 'badge badge-secondary bagde-unpublished'} >{ass.isPublished ? 'PUBLISHED' : 'UNPUBLISHED'}</span>
@@ -185,5 +187,6 @@ export default connect(mapStateToProps, {
   pubOrUnpub: publishOrUnpublishAssignment,
   delete: deleteAssignment,
   fetchSubmissions: getSubmissions,
-  getCourseSections: getCourseSections
+  getCourseSections: getCourseSections,
+  getAllMembers: getAllMembers
 })(Assignments);
