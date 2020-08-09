@@ -70,7 +70,6 @@ const Grades = (props) => {
     <SpecificCourse page={title} submenu="Grades" >
 
       <div className="col-md-10">
-      <h4 className="page-title pb-3">Grades</h4>
      <div className="pl-2">
       <Form.Group>
         <Form.Control as="select" value={section} onChange={e => changeSection(e.target.value)}>
@@ -84,7 +83,7 @@ const Grades = (props) => {
         </Form.Control>
       </Form.Group>
      </div>
-      <div className="carded-table-scroll large-table" > 
+      <div className="carded-table-scroll large-table large-scroll" > 
     {/* Table  Start*/}
       <TableLayout headers={['Name', ...headers, 'Current Marks', 'Percentage']}>      
           {

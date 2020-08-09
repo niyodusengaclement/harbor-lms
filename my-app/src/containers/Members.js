@@ -131,8 +131,7 @@ const Members = (props) => {
 
       <div>
         <div className="col-md-8">
-          <h4 className="page-title pb-3">Members</h4>
-          <div className="carded-table-scroll large-table">
+          <div className="carded-table-scroll large-table large-scroll">
             
           {/* Table  Start*/}
           <TableLayout headers={['Name', 'Member ID', 'Role', 'Section', 'Status']}> 

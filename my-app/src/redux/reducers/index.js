@@ -7,6 +7,7 @@ import assignments from './assignmentsReducer';
 import students from './studentsReducer';
 import invitations from './invitationsReducer';
 import chatsReducer from "./chatsReducer";
+import notesReducer from "./notesReducer";
 
 export default combineReducers({
   auth,
@@ -17,4 +18,5 @@ export default combineReducers({
   students,
   invitations,
   chat: chatsReducer,
+  notes: notesReducer,
 });

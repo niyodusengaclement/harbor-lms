@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { ASSIGNMENT_ACTION_FAILED, ASSIGNMENT_ACTION_START, CREATE_ASSIGNMENT_SUCCESS, GET_ASSIGNMENT_SUCCESS, DELETE_ASSIGNMENT_SUCCESS, UPDATE_ASSIGNMENT_SUCCESS, CREATE_ASSIGNMENT_SUBMISSION_SUCCESS, GET_ASSIGNMENT_SUBMISSION_SUCCESS } from "./actionTypes";
+import { ASSIGNMENT_ACTION_FAILED, ASSIGNMENT_ACTION_START, CREATE_ASSIGNMENT_SUCCESS, GET_ASSIGNMENT_SUCCESS, DELETE_ASSIGNMENT_SUCCESS, UPDATE_ASSIGNMENT_SUCCESS, CREATE_ASSIGNMENT_SUBMISSION_SUCCESS, GET_ASSIGNMENT_SUBMISSION_SUCCESS, UPLOADING_ASSIGNMENT_FILE_START, UPLOAD_PROGRESS } from "./actionTypes";
 import actionCreator from "./actionCreator";
 
 export const createAssignment = (newAssignment) => {
@@ -152,6 +152,46 @@ export const submitAssignment = (submission) => {
   };
 };
 
+export const uploadAssignmentFile = (file, submission) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firebase = getFirebase();
+    const firestore = getFirestore();
+
+    const storagePath = "assignmentSubmissions/files";
+
+    dispatch(actionCreator(UPLOADING_ASSIGNMENT_FILE_START));
+    firebase
+      .uploadFile(storagePath, file)
+      .then(({uploadTaskSnapshot}) => {
+        const progress = (uploadTaskSnapshot.bytesTransferred / uploadTaskSnapshot.totalBytes) * 100;
+        dispatch(actionCreator(UPLOAD_PROGRESS, progress))
+        uploadTaskSnapshot.ref.getDownloadURL().then((downloadURL) => {
+          submission.response = downloadURL;
+          submission.fileType = file.type;
+          firestore
+            .collection("assignmentSubmissions")
+            .add(submission)
+            .then((doc)=>{
+                const res = submission;
+                res.id = doc.id;
+                dispatch(actionCreator(CREATE_ASSIGNMENT_SUBMISSION_SUCCESS, submission))
+            })
+            .catch((err) => {
+              toast.error(err, {
+                position: "top-center",
+                hideProgressBar: true,
+              });
+              return dispatch(actionCreator(ASSIGNMENT_ACTION_FAILED, err));
+              });
+          });
+        toast.success('Assignment submitted successfully', {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      })
+  };
+};
+
 export const getSubmissions = (assignmentId) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {
@@ -254,5 +294,36 @@ export const updateSubmission = (data) => {
       });
       return dispatch(actionCreator(ASSIGNMENT_ACTION_FAILED, err));
     }
+  };
+};
+
+export const uploadUpdatedAssignmentFile = (file, submission) => {
+  return (dispatch, getState, { getFirebase, getFirestore }) => {
+    const firebase = getFirebase();
+    const firestore = getFirestore();
+
+    const storagePath = "assignmentSubmissions/files";
+
+    dispatch(actionCreator(UPLOADING_ASSIGNMENT_FILE_START));
+    firebase
+      .uploadFile(storagePath, file)
+      .then(({uploadTaskSnapshot}) => {
+        const progress = (uploadTaskSnapshot.bytesTransferred / uploadTaskSnapshot.totalBytes) * 100;
+        dispatch(actionCreator(UPLOAD_PROGRESS, progress))
+        uploadTaskSnapshot.ref.getDownloadURL().then( async (downloadURL) => {
+          submission.response = downloadURL;
+          submission.fileType = file.type;
+          const firestore = getFirestore();
+          dispatch(actionCreator(ASSIGNMENT_ACTION_START));
+          const ref = firestore.collection("assignmentSubmissions").doc(submission.id);
+          
+          const u = await ref.update(submission);
+          return dispatch(actionCreator(CREATE_ASSIGNMENT_SUBMISSION_SUCCESS, submission))
+          });
+        toast.success('Submission Updated successfully', {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      });
   };
 };
