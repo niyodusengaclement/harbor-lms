@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import SpecificCourse from "../components/SpecificCourse";
 import ReactQuill from 'react-quill';
-import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createAssignment, submitAssignment, getSubmissions, updateSubmission } from "../redux/actions/assignmentActions";
+import { getAssignments, publishOrUnpublishAssignment, deleteAssignment, createAssignment, submitAssignment, getSubmissions, updateSubmission, uploadAssignmentFile, uploadUpdatedAssignmentFile } from "../redux/actions/assignmentActions";
 import { connect } from "react-redux";
-import { Spinner, Dropdown, Button } from "react-bootstrap";
+import { Spinner, Dropdown, Button, ProgressBar } from "react-bootstrap";
 import { getDateAndTime, dueDateCalculator } from "../helpers/getDate";
 import { getCourses, getCourseSections } from "../redux/actions/coursesActions";
 import ModalLayout from "../components/ModalLayout";
@@ -37,7 +37,6 @@ const SpecificAssignment = (props) => {
     setIsLoading(true)
     props.getCourseSections(params.courseId, setIsLoading);
   }
-  
 
   const handleShow = () => setShow(!show);
   const handleClick = () => {
@@ -90,20 +89,20 @@ const SpecificAssignment = (props) => {
           hideProgressBar: true,
         });
       }
-      data.response = file;
-      console.log('file', file)
       if(submission.length > 0) {
         data.id = submission[0].id;
-        props.updateSubmission(data);
+        props.uploadUpdatedAssignment(file[0], data);
         return handleShow();
       }
-      // props.sendSubmission(data);
+      props.uploadAssignmentFile(file[0], data);
+      return handleShow();
     }
   }
 
   const findSectionName = (id) => {
     const found = sections.find(({sectionId}) => sectionId === id);
-    return found.sectionName;
+    if(found) return found.sectionName;
+    return '';
   }
 
 
@@ -126,9 +125,8 @@ const SpecificAssignment = (props) => {
 
         <>
       <div className="col-md-8">
-      <h4 className="page-title pb-3">Submissions</h4>
 
-        <div className="carded-table-scroll">  
+        <div className="carded-table-scroll large-scroll">  
           <TableLayout headers={['Name', 'Section', 'Submitted On', 'Grade']}>      
         {
           assignments.submissions.length > 0 ?
@@ -182,6 +180,9 @@ const SpecificAssignment = (props) => {
         }
         </ModalLayout>
         <div className="col-md-8">
+        {
+          assignments.isUploading ? <ProgressBar animated now={assignments.progress} /> : null
+        }
       
         {
             singleAssignment ?
@@ -270,4 +271,6 @@ export default connect(mapStateToProps, {
   fetchSubmissions: getSubmissions,
   updateSubmission: updateSubmission,
   getCourseSections: getCourseSections,
+  uploadAssignmentFile: uploadAssignmentFile,
+  uploadUpdatedAssignment: uploadUpdatedAssignmentFile,
 })(SpecificAssignment);

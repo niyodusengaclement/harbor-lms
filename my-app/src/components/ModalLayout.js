@@ -14,7 +14,9 @@ const ModalLayout = ({ children, handleShow, show, header, handleClick, buttonNa
             <h6 className="modal-title m-title" >{header}</h6>
             </Modal.Title>
           </Modal.Header>
+          <div className="modal-body-scroll">
           {children}
+          </div>
           <Modal.Footer>
             <button className="green-btn" onClick={handleClick}>
               {buttonName ? buttonName : 'Submit'}

@@ -55,6 +55,12 @@
   overflow-y: auto;
   overflow-x: auto;
 }
+.large-scroll {
+  height: 85%;
+}
+.medium-scroll {
+  height: 78%;
+}
 .large-table {
   width: 900px !important;
 }
@@ -156,7 +162,7 @@
 
 .vl {
   border-left: 1px solid rgba(0, 0, 0, 0.20);
-  height: 90%;
+  height: 80%;
   position: absolute;
   margin-left: -10px;
   top: 17%;
