@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "./Modal";
 import {
   getCourseSectionByName,
   deleteCourseSection,
 } from "../redux/actions/coursesActions";
 import { connect } from "react-redux";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Dropdown } from "react-bootstrap";
 
 const DropdownComponent = (props) => {
   const { type, handleClick, rowId } = props;
@@ -50,32 +52,27 @@ const DropdownComponent = (props) => {
     }
   };
   return (
-    <div className="dropdown">
+    <div className="">
       <Spinner
         animation="border"
         variant="primary"
         className={isLoading ? "spinner--position__center" : "hide"}
       />
       {displayModal(isLoading === false)}
-      <h5 className="dropbtn">...</h5>
-      <div className="dropdown-content">
-        <a
-          id={rowId}
-          href="#/"
-          name="section"
-          onClick={(event) => toggleModal(event.target)}
-        >
-          edit
-        </a>
-        <a
-          id={rowId}
-          href="#/"
-          name="delete"
-          onClick={(event) => toggleModal(event.target)}
-        >
-          delete
-        </a>
-      </div>
+
+                <div className="dropdown-no-caret float-right">
+                    <Dropdown>
+                      <Dropdown.Toggle id="dropdown-button-drop-left">
+                        <div className="drop-menu"><FontAwesomeIcon icon={faEllipsisH} /></div>
+                      </Dropdown.Toggle>
+  
+                      <Dropdown.Menu>
+                        <Dropdown.Item id={rowId} name="section" onClick={(event) => toggleModal(event.target)}>Edit</Dropdown.Item>
+                        <Dropdown.Item id={rowId} className="required" name="delete" onClick={(event) => toggleModal(event.target)}>Delete</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+
     </div>
   );
 };

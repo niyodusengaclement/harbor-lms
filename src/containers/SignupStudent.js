@@ -71,7 +71,7 @@ const getStudentUniqueNumber = async () => {
         setSuccessMsg('');
         setIsLoading(true);
         if(password !== confirmPassword){ setErrorMsg('confirm password not matching password');}
-        else if(fullName && fatherName && motherName && role && password && termsAgreement && target.name === 'Register'){
+        else if(fullName && fatherName && motherName && role && password && termsAgreement){
             const studentUniqueNumber = await getStudentUniqueNumber();
             let studentAuthInfo;
             if(!phoneNumber || (!email && !phoneNumber)) studentAuthInfo = {fullName,fatherName,motherName,role,email:`${studentUniqueNumber}@noemail.com`,password,studentUniqueNumber};

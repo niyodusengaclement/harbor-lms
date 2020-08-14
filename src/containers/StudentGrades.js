@@ -31,7 +31,7 @@ const StudentGrades = (props) => {
   let total = 0;
   const validSubmission = assignments.submissions.length > 0 ? assignments.submissions.filter(({sectionId}) => sectionId !== undefined): [];
   const studentGrades = validSubmission.length > 0 ? validSubmission.map(sub => {
-    const ass =  assignments.values.length > 0 ?  assignments.values.find(x => x.id === sub.assignmentId && x.isPublished === true && x.isGradable === true) : [];
+    const ass =  assignments.values.length > 0 ?  assignments.values.find(x => x.id === sub.assignmentId && x.isGradable === true) : [];
     ass.grade = sub.grade;
     ass.fullName = sub.fullName;
     ass.studentId = sub.studentId;

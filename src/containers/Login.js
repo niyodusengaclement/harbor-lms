@@ -41,7 +41,7 @@ const Login =(props) => {
         setErrorMsg('');
         setSuccessMsg('');
         setIsLoading(true);
-        if(emailOrStudentUniqueNumber && password && (target.name === 'login' || target.id === 'login')){
+        if(emailOrStudentUniqueNumber && password){
             props.login({emailOrStudentUniqueNumber,password});
             if(!props.authError)setErrorMsg(null); 
         }

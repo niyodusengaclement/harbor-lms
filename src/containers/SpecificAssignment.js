@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Spinner, Dropdown, Button, ProgressBar } from "react-bootstrap";
 import { getDateAndTime, dueDateCalculator } from "../helpers/getDate";
 import { getCourses, getCourseSections } from "../redux/actions/coursesActions";
+import { getMembers } from "../redux/actions/membersActions";
 import ModalLayout from "../components/ModalLayout";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -19,17 +20,19 @@ const SpecificAssignment = (props) => {
   const [ file, setFile ] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { assignments, courses, userProfile, sections, match: { params }  } = props;
+  const { assignments, courses, userProfile, members, sections, match: { params }  } = props;
   const { role, fullName } = userProfile;
   const studentId = localStorage.getItem('rems_user_id');
   const singleAssignment = assignments.values.length > 0 ? assignments.values.filter(({id}) => id === params.assignmentId) : [];
   const submission = assignments.submissions.length > 0 ? assignments.submissions.filter((sub) => sub.studentId === studentId && sub.assignmentId === params.assignmentId) : [];
   const title = `${localStorage.getItem('courseName')} > Assignments > ${singleAssignment[0] ? singleAssignment[0].assignmentName : ''}`;
+  const studentSection = members.values.find(({studentUniqueNumber}) => studentUniqueNumber === userProfile.studentUniqueNumber);
 
   useEffect(() => {
     props.fetchAssignments(params.courseId);
     props.fetchCourses();
     props.fetchSubmissions(params.assignmentId);
+    props.getMembers(localStorage.getItem('courseId'));
     fetch();
   }, []);
 
@@ -49,6 +52,7 @@ const SpecificAssignment = (props) => {
       submittedOn: new Date().setTime(new Date()),
       grade: '',
       comment: '',
+      sectionId: studentSection.sectionId,
     }
     if(singleAssignment[0].submissionType === 'Text Entry') {
       if(!text ) {
@@ -104,7 +108,6 @@ const SpecificAssignment = (props) => {
     if(found) return found.sectionName;
     return '';
   }
-
 
   const Loading  = assignments.isLoading ? 
         <Spinner
@@ -257,9 +260,10 @@ const SpecificAssignment = (props) => {
   );
 }
 
-const mapStateToProps = ({ assignments, courses, firebase }) => ({
+const mapStateToProps = ({ assignments, courses, members, firebase }) => ({
   courses,
   assignments,
+  members,
   userProfile: firebase.profile,
   sections: courses.sections
 });
@@ -273,4 +277,5 @@ export default connect(mapStateToProps, {
   getCourseSections: getCourseSections,
   uploadAssignmentFile: uploadAssignmentFile,
   uploadUpdatedAssignment: uploadUpdatedAssignmentFile,
+  getMembers: getMembers,
 })(SpecificAssignment);
