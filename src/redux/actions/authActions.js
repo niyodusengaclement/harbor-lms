@@ -68,7 +68,6 @@ export const logout = () => {
         hideProgressBar: true,
         position: 'top-center'
       });
-      window.location.replace('/login');
     }).catch(function(error) {
       toast.error(error, {
         hideProgressBar: true,

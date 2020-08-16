@@ -12,8 +12,9 @@ const CourseCard = (props) => {
     localStorage.setItem('courseName', course.name);
     localStorage.setItem('courseId', course.id);
   }
+  const isOwner = props.course.instructorId === localStorage.getItem('rems_user_id') ? true : false;
 
-  return ( 
+  return (
     <>
       <div className="col-md-3">
         <div className="card course-card">
@@ -22,7 +23,11 @@ const CourseCard = (props) => {
           <div style={{backgroundColor: props.course.color}} className="course-image"></div>
           }
           <div className="button mb-1">
+          {
+            isOwner ?
             <button className="float-right publish-unpublish-btn" onClick={(e) => updateState(props.course)}><span>{props.course.isPublished ? 'Unpublish' : 'Publish'}</span></button>
+            : null
+          }
           </div>
           <div className="card-block p-3">
             <p className="course-title"><Link className="black-links" onClick={() => setCourseToStorage(props.course)} to={`courses/${props.course.id}/notes`}>{props.course.name}</Link></p>

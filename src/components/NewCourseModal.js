@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 const NewCourseModal = (props) => {
   const [coverImage, setcoverImage] = useState([]);
   const [courseName, setcourseName] = useState('');
+  const [courseCode, setcourseCode] = useState('');
   const [courseDescription, setcourseDescription] = useState('');
   const { uid } = getProfile();
 
@@ -52,7 +53,7 @@ const NewCourseModal = (props) => {
     e.preventDefault();
 
     if(courseName === '' || courseDescription === '') {
-      return toast.error('Course Name and Description are required',{
+      return toast.error('Course Name, Course Code and Description are required',{
         position: 'top-center',
         hideProgressBar: true,
       });
@@ -64,6 +65,7 @@ const NewCourseModal = (props) => {
       const data = {
         instructorId: uid,
         name: courseName,
+        code: courseCode,
         description: courseDescription,
         hasImage: coverImage[0] !== undefined ? true : false,
         isPublished: false,
@@ -82,12 +84,14 @@ const NewCourseModal = (props) => {
 
   const changeHandler = (evt) => {
     evt.target.name === 'name' ? setcourseName(evt.target.value)
+    : evt.target.name === 'code' ? setcourseCode(evt.target.value)
     : evt.target.name === 'description' ? setcourseDescription(evt.target.value)
     : void(0);
   }
   const clearInput = () => {
     setcourseName('');
     setcourseDescription('');
+    setcourseCode('');
     setcoverImage([]);
   }
 
@@ -109,6 +113,10 @@ const NewCourseModal = (props) => {
                   <div className="form-group">
                     <label htmlFor="courseName">Course Name<span className="required"> *</span></label>
                     <input type="text" className="form-control" value={courseName} name="name" onChange={changeHandler} placeholder="eg: JavaScript Fundamentals" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="courseName">Course Code<span className="required"> *</span></label>
+                    <input type="text" className="form-control" maxLength={8} value={courseCode} name="code" onChange={changeHandler} placeholder="eg: JS 101" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="description">Description<span className="required"> *</span></label>

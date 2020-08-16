@@ -38,6 +38,8 @@ const StudentDashboard = (props) => {
     return crs;
   }) : [];
 
+  const publishedCourses = enrolledIn.filter(({isPublished}) => isPublished);
+
   return (
 			<div className="main-panel">
       <div className="content">
@@ -52,7 +54,7 @@ const StudentDashboard = (props) => {
             className={isLoading ? 'spinner--position__center' : 'hide'}
           />
             {
-              enrolledIn.length > 0 ? enrolledIn.map((course, idx) => 
+              publishedCourses.length > 0 ? publishedCourses.map((course, idx) => 
                 <CourseCard
                   key={idx}
                   course={course}

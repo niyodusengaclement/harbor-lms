@@ -8,6 +8,7 @@ import { getDateAndTime, dueDateCalculator } from "../helpers/getDate";
 import { getCourses } from "../redux/actions/coursesActions";
 import ModalLayout from "../components/ModalLayout";
 import { toast } from "react-toastify";
+import { Link } from 'react-router-dom';
 
 const Submissions = (props) => {
   const [ show, setShow ] = useState(false);
@@ -32,6 +33,12 @@ const Submissions = (props) => {
   const handleClick = () => {
     if(!marks) {
       return toast.error('Grade is required', {
+        hideProgressBar: true,
+        position: "top-center"
+      });
+    }
+    if(parseInt(marks) > parseInt(thisAssignment[0].points)) {
+      return toast.error('Marks you provide is greater than Maximum points', {
         hideProgressBar: true,
         position: "top-center"
       });
@@ -109,7 +116,10 @@ const Submissions = (props) => {
               submissionInfo.submissionType === 'File upload' ?
                 <iframe className="carded-table-scroll" src={isDecoded(submissionInfo)} ></iframe>
               :
-              <div dangerouslySetInnerHTML={{__html: submissionInfo.response}}></div>              
+              submissionInfo.submissionType === 'Website URL' ?
+              <Link target="_blank" to={`//${submissionInfo.response}`}>{submissionInfo.response}</Link>
+              :
+              <div dangerouslySetInnerHTML={{__html: submissionInfo.response}}></div>
             }
             </div>
             :null

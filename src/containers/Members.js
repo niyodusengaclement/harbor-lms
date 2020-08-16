@@ -67,6 +67,7 @@ const Members = (props) => {
     props.addCourseMembers(courseId, courseName, section.label, invitees);
     setMultiChange(null);
     setSection(null);
+    handleShow();
   };
 
   const allMembers = props.allMembers.length > 0 ? props.allMembers.map((mbr) => {

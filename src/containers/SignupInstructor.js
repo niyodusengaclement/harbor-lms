@@ -53,7 +53,7 @@ const Signup =(props) => {
         setSuccessMsg('');
         setIsLoading(true);
         if(password !== confirmPassword){ setErrorMsg('confirm password not matching password');}
-        else if(fullName && email && role && password && termsAgreement && target.name === 'Register'){
+        else if(fullName && email && role && password && termsAgreement){
             props.signup({fullName,email,role,phoneNumber,password,school: schoolName});
             if(!props.authError)setErrorMsg(null); 
         }

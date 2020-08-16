@@ -8,7 +8,7 @@ import { getCourseSections, getCourses } from "../redux/actions/coursesActions";
 import { Spinner } from "react-bootstrap";
 import TableLayout from "../components/TableLayout";
 import DropDown from "../components/DropDown";
-
+import { getMembers } from "../redux/actions/membersActions";
 
 const CourseSection = (props) => {
   const [isToggled, toggle] = useState(false);
@@ -16,11 +16,12 @@ const CourseSection = (props) => {
   const [isPageRefreshed,setIsPageRefreshed] = useState('');
   const [dropDownState, setDropDownState] = useState(false);
 
-  const { courses, match: { params }  } = props;
+  const { courses, members, match: { params }  } = props;
   useEffect(() => {
     setIsLoading(true)
     props.fetchCourses();
     props.getCourseSections(params.courseId, setIsLoading);
+    props.getMembers(localStorage.getItem('courseId'));
   }, []);
 
   useEffect(() => {
@@ -41,6 +42,10 @@ const CourseSection = (props) => {
       setDropDownState(!dropDownState);
     }
   };
+  const membersPerSection = (id) => {
+    const allMembers = members.values.filter(({sectionId, status}) => sectionId === id && status === 'accepted');
+    return allMembers.length;
+  }
   const tableRows = props.sections;
   return (
     <SpecificCourse
@@ -75,7 +80,7 @@ const CourseSection = (props) => {
               <td>{tableRow.sectionId}</td>
               <td>{tableRow.startingDate}</td>
               <td>{tableRow.closingDate}</td>
-              <td>{tableRow.members}</td>
+              <td>{membersPerSection(tableRow.sectionId)}</td>
               <td>
                 <DropDown handleClick={handleDropdown} rowId={tableRow.sectionName} />
               </td>
@@ -94,17 +99,19 @@ const CourseSection = (props) => {
     </SpecificCourse>
   );
 };
-const mapStateToProps = ({ courses }) => {
+const mapStateToProps = ({ courses, members }) => {
   return {
     courses: courses.values,
     sections: courses.sections,
     actionMessage: courses.message,
+    members,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
     getCourseSections: (courseId,setIsLoading,setIsPageRefreshed) => dispatch(getCourseSections(courseId,setIsLoading,setIsPageRefreshed)),
     fetchCourses: () => dispatch(getCourses()),
+    getMembers: (courseId) => dispatch(getMembers(courseId)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CourseSection);
