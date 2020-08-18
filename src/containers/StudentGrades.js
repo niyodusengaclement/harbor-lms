@@ -29,7 +29,7 @@ const StudentGrades = (props) => {
 
   let marks = 0;
   let total = 0;
-  const validSubmission = assignments.submissions.length > 0 ? assignments.submissions.filter(({sectionId}) => sectionId !== undefined): [];
+  const validSubmission = assignments.submissions.length > 0 ? assignments.submissions.filter(({sectionId, courseId}) => courseId === localStorage.getItem('courseId') && sectionId !== undefined): [];
   const studentGrades = validSubmission.length > 0 ? validSubmission.map(sub => {
     const ass =  assignments.values.length > 0 ?  assignments.values.find(x => x.id === sub.assignmentId && x.isGradable === true) : [];
     ass.grade = sub.grade;

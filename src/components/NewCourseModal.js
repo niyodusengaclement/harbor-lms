@@ -13,6 +13,7 @@ const NewCourseModal = (props) => {
   const [coverImage, setcoverImage] = useState([]);
   const [courseName, setcourseName] = useState('');
   const [courseCode, setcourseCode] = useState('');
+  const [courseCredit, setcourseCredit] = useState('');
   const [courseDescription, setcourseDescription] = useState('');
   const { uid } = getProfile();
 
@@ -52,8 +53,8 @@ const NewCourseModal = (props) => {
   const SendHandler = (e) => {
     e.preventDefault();
 
-    if(courseName === '' || courseDescription === '') {
-      return toast.error('Course Name, Course Code and Description are required',{
+    if(courseCode === '' || courseCredit === '' || courseName === '' || courseDescription === '') {
+      return toast.error('Fill all required fields',{
         position: 'top-center',
         hideProgressBar: true,
       });
@@ -66,6 +67,7 @@ const NewCourseModal = (props) => {
         instructorId: uid,
         name: courseName,
         code: courseCode,
+        credit: courseCredit,
         description: courseDescription,
         hasImage: coverImage[0] !== undefined ? true : false,
         isPublished: false,
@@ -85,6 +87,7 @@ const NewCourseModal = (props) => {
   const changeHandler = (evt) => {
     evt.target.name === 'name' ? setcourseName(evt.target.value)
     : evt.target.name === 'code' ? setcourseCode(evt.target.value)
+    : evt.target.name === 'credit' ? setcourseCredit(evt.target.value)
     : evt.target.name === 'description' ? setcourseDescription(evt.target.value)
     : void(0);
   }
@@ -92,6 +95,7 @@ const NewCourseModal = (props) => {
     setcourseName('');
     setcourseDescription('');
     setcourseCode('');
+    setcourseCredit('');
     setcoverImage([]);
   }
 
@@ -117,6 +121,10 @@ const NewCourseModal = (props) => {
                   <div className="form-group">
                     <label htmlFor="courseName">Course Code<span className="required"> *</span></label>
                     <input type="text" className="form-control" maxLength={8} value={courseCode} name="code" onChange={changeHandler} placeholder="eg: JS 101" />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="courseName">Course Credit<span className="required"> *</span></label>
+                    <input type="number" className="form-control" maxLength={2} value={courseCredit} name="credit" onChange={changeHandler} placeholder="eg: 5" />
                   </div>
                   <div className="form-group">
                     <label htmlFor="description">Description<span className="required"> *</span></label>
