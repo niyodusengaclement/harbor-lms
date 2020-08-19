@@ -68,21 +68,20 @@ const CourseSection = (props) => {
       <h6>COURSE SECTIONS</h6>
       <p>Create sections for different course offering intakes.</p>
 
-      {/* <SearchBar onChangeHandler={onSearchHandler} /> */}
-      
         <div className="carded-table-scroll">  
-        <TableLayout headers={['Name', 'ID', 'Start Date', 'End Date', 'Members', '']}>      
+        <TableLayout headers={['Name', 'ID', 'Academic Year', 'Start Date', 'End Date', 'Members', '']}>      
         {
           tableRows.length ? 
           tableRows.map((tableRow) => 
-            <tr>
+            <tr key={tableRow.sectionId}>
               <td>{tableRow.sectionName}</td>
               <td>{tableRow.sectionId}</td>
+              <td>{tableRow.academicYear}</td>
               <td>{tableRow.startingDate}</td>
               <td>{tableRow.closingDate}</td>
               <td>{membersPerSection(tableRow.sectionId)}</td>
               <td>
-                <DropDown handleClick={handleDropdown} rowId={tableRow.sectionName} />
+                <DropDown handleClick={handleDropdown} rowId={tableRow.sectionId} />
               </td>
             </tr>
           )

@@ -16,6 +16,7 @@ const ModalComponent = (props) => {
   const { toggled, isDocEdit, isDropdown, } = props;
   const [show, setShow] = useState(props.show);
   const [sectionName, setSectionName] = useState(props.sectionName || "");
+  const [academicYear, setAcademicYear] = useState(props.academicYear || "");
   const [calendarSystem, setCalendarSystem] = useState(
     props.calendarSystem || ""
   );
@@ -30,6 +31,7 @@ const ModalComponent = (props) => {
     setSemOrTrim("");
     setStartingDate("");
     setClosingDate("");
+    setAcademicYear("");
   };
   useEffect(() => {
 
@@ -40,6 +42,7 @@ const ModalComponent = (props) => {
     else if (target.type === "radio" && target.name === "calendarSystem")
       setCalendarSystem(target.value);
     else if (target.name === "trim/sem") setSemOrTrim(target.value);
+    else if (target.id === "academicYear") setAcademicYear(target.value);
     else if (target.name === "startingDate") setStartingDate(target.value);
     else if (target.name === "closingDate") setClosingDate(target.value);
   };
@@ -48,6 +51,7 @@ const ModalComponent = (props) => {
       setIsLoading(true);
       if (
         sectionName &&
+        academicYear &&
         calendarSystem &&
         semOrTrim &&
         startingDate &&
@@ -57,6 +61,7 @@ const ModalComponent = (props) => {
         if (isInEditMode) {
           const updatedSection = {
             sectionName,
+            academicYear,
             calendarSystem,
             semOrTrim,
             startingDate,
@@ -80,6 +85,7 @@ const ModalComponent = (props) => {
           );
           const sectionInfo = {
             sectionName,
+            academicYear,
             calendarSystem,
             semOrTrim,
             startingDate,
@@ -130,6 +136,17 @@ const ModalComponent = (props) => {
             id="sectionName"
             value={sectionName}
             placeholder="example: course 1"
+            handleChange={handleChange}
+            className="input__large"
+          />
+          <h6>
+            Academic Year <span className="required">*</span> :
+          </h6>
+          <InputField
+            type="text"
+            id="academicYear"
+            value={academicYear}
+            placeholder="2020/2021"
             handleChange={handleChange}
             className="input__large"
           />

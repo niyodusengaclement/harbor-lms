@@ -3,7 +3,7 @@ import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "./Modal";
 import {
-  getCourseSectionByName,
+  getCourseSectionBySectionId,
   deleteCourseSection,
 } from "../redux/actions/coursesActions";
 import { connect } from "react-redux";
@@ -25,11 +25,11 @@ const DropdownComponent = (props) => {
   const toggleModal = (target) => {
     if (target.name === "section") {
       setIsLoading(true);
-      props.getCourseSectionByName(localStorage.getItem("courseId"), target.id);
+      props.getCourseSectionBySectionId(localStorage.getItem("courseId"), target.id);
       toggle(!isToggled);
     } else if (target.name === "delete"){
       setIsLoading(true);
-      props.getCourseSectionByName(localStorage.getItem("courseId"), target.id);
+      props.getCourseSectionBySectionId(localStorage.getItem("courseId"), target.id);
       const response = window.confirm("Are you sure you want to delete?");
       setDeleteConfirmation(response);
     }
@@ -41,6 +41,7 @@ const DropdownComponent = (props) => {
           toggled={isToggled}
           modalTitle="Edit section"
           sectionName={props.section.sectionName}
+          academicYear={props.section.academicYear}
           calendarSystem={props.section.calendarSystem}
           semOrTrim={props.section.semOrTrim}
           startingDate={props.section.startingDate}
@@ -60,18 +61,18 @@ const DropdownComponent = (props) => {
       />
       {displayModal(isLoading === false)}
 
-                <div className="dropdown-no-caret float-right">
-                    <Dropdown>
-                      <Dropdown.Toggle id="dropdown-button-drop-left">
-                        <div className="drop-menu"><FontAwesomeIcon icon={faEllipsisH} /></div>
-                      </Dropdown.Toggle>
-  
-                      <Dropdown.Menu>
-                        <Dropdown.Item id={rowId} name="section" onClick={(event) => toggleModal(event.target)}>Edit</Dropdown.Item>
-                        <Dropdown.Item id={rowId} className="required" name="delete" onClick={(event) => toggleModal(event.target)}>Delete</Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
+      <div className="dropdown-no-caret float-right">
+        <Dropdown>
+          <Dropdown.Toggle id="dropdown-button-drop-left">
+            <div className="drop-menu"><FontAwesomeIcon icon={faEllipsisH} /></div>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item id={rowId} name="section" onClick={(event) => toggleModal(event.target)}>Edit</Dropdown.Item>
+            <Dropdown.Item id={rowId} className="required" name="delete" onClick={(event) => toggleModal(event.target)}>Delete</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
 
     </div>
   );
@@ -84,8 +85,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCourseSectionByName: (courseId, sectionName) =>
-      dispatch(getCourseSectionByName(courseId, sectionName)),
+    getCourseSectionBySectionId: (courseId, sectionName) =>
+      dispatch(getCourseSectionBySectionId(courseId, sectionName)),
     deleteCourseSection: (courseId, sectionId) =>
       dispatch(deleteCourseSection(courseId, sectionId)),
   };

@@ -20,6 +20,7 @@ import {
 import actionCreator from "./actionCreator";
 import { toast } from "react-toastify";
 import { getProfile } from "../../helpers/utils";
+import { faLongArrowAltRight } from "@fortawesome/free-solid-svg-icons";
 
 export const createCourse = (newCourse) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -108,25 +109,29 @@ export const createCourseSection = (
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {
       const firestore = getFirestore();
-      const course = firestore.collection("courses").doc(courseId);
-      await course.collection("sections").doc().set(section);
-
-      const updatedSectionsSnaps = await course.collection("sections").get();
-      let updatedSections = [];
-      updatedSectionsSnaps.forEach((updatedSection) =>
-        updatedSections.push(updatedSection.data())
-      );
-      dispatch({
-        type: CREATE_COURSE_SECTION_SUCCESS,
-        payload: section,
+      section.courseId = courseId;      
+      return firestore
+      .collection("sections")
+      .add(section)
+      .then((doc)=>{
+          const res = section;
+          res.id = doc.id;
+          
+          toast.success("Section created successfully", {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+          setIsLoading(false);
+          setShow(false);
+          return dispatch(actionCreator(CREATE_COURSE_SECTION_SUCCESS, res));
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        return dispatch(actionCreator(CREATE_COURSE_SECTION_FAILURE, err));
       });
-
-      toast.success("Section created successfully", {
-        position: "top-center",
-        hideProgressBar: true,
-      });
-      setIsLoading(false);
-      setShow(false);
     } catch (error) {
       dispatch({
         type: CREATE_COURSE_SECTION_FAILURE,
@@ -140,30 +145,33 @@ export const getCourseSections = (courseId, setIsLoading) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {
       const firestore = getFirestore();
-      const course = firestore.collection("courses").doc(courseId);
+      const ref = firestore.collection("sections");
       let courseSections = [];
-      const snapshot = await course.collection("sections").get();
-      snapshot.forEach((doc) => courseSections.push(doc.data()));
+      const snapshot = await ref.where('courseId', '==', courseId).get();
+      snapshot.forEach((doc) => {
+        const data = doc.data()
+        data.id = doc.id;
+        courseSections.push(data);
+      });
       dispatch({
         type: GET_COURSE_SECTIONS,
         payload: courseSections,
       });
       setIsLoading(false);
     } catch (error) {
-      console.log("error: ", error);
+      console.error("error: ", error);
       setIsLoading(false);
     }
   };
 };
 
-export const getCourseSectionByName = (courseId, sectionName) => {
+export const getCourseSectionBySectionId = (courseId, sectionId) => {
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
     try {
       const firestore = getFirestore();
-      const course = firestore.collection("courses").doc(courseId);
-      const sectionSnapshot = await course
+      const sectionSnapshot = await firestore
         .collection("sections")
-        .where("sectionName", "==", `${sectionName}`)
+        .where("sectionId", "==", `${sectionId}`)
         .get();
       let sectionData;
       sectionSnapshot.forEach((doc) => {
@@ -179,6 +187,7 @@ export const getCourseSectionByName = (courseId, sectionName) => {
     }
   };
 };
+
 export const updateCourseSection = (
   courseId,
   sectionId,
@@ -189,8 +198,7 @@ export const updateCourseSection = (
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
     try {
       const firestore = getFirestore();
-      const course = firestore.collection("courses").doc(courseId);
-      const sectionDoc = await course.collection("sections").doc(sectionId);
+      const sectionDoc = await firestore.collection("sections").doc(sectionId);
       await sectionDoc.update(updates);
       toast.success("Section updated successfully", {
         position: "top-center",
@@ -215,10 +223,8 @@ export const deleteCourseSection = (courseId, sectionId) => {
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
     try {
       const firestore = getFirestore();
-      const course = firestore.collection("courses").doc(courseId);
-      const sectionDoc = await course.collection("sections").doc(sectionId);
+      const sectionDoc = await firestore.collection("sections").doc(sectionId);
       const deleted = await sectionDoc.delete();
-      console.log("deleted: ", deleted);
 
       toast.success("Section deleted successfully", {
         position: "top-center",
