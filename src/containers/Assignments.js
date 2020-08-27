@@ -11,16 +11,12 @@ import SearchBar from "../components/SearchBar";
 import { Link } from "react-router-dom";
 import TableLayout from "../components/TableLayout";
 import ModalLayout from "../components/ModalLayout";
-
-
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import "../assets/styles/styles.scss";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { toast } from "react-toastify";
-
 
 const Assignments = (props) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -328,7 +324,7 @@ const Assignments = (props) => {
 
         </div>
         </div>
-        <div className="col">
+        <div className="col reserved-side">
         </div>
     </SpecificCourse>
   );

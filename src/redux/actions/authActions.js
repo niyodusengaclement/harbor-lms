@@ -23,6 +23,10 @@ export const signup = (newUser) => {
       })
       .catch((error) => {
         dispatch({ type: actionTypes.SIGNUP_FAILURE, error });
+        return toast.error(error.message, {
+          hideProgressBar: true,
+          position: 'top-center'
+        });
       });
   };
 };
@@ -31,6 +35,7 @@ export const login = (user) => {
   return async (dispatch, state, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
     const firestore = getFirestore();
+    dispatch({ type: 'LOGIN_START'});
     const snapshot = await firestore.collection('users').where('studentUniqueNumber','==', parseInt(user.emailOrStudentUniqueNumber)).get();
     let studentEmail;
     if(snapshot.empty) studentEmail = user.emailOrStudentUniqueNumber;
@@ -54,6 +59,10 @@ export const login = (user) => {
           type: actionTypes.LOGIN_FAILURE,
           error
         })
+        return toast.error(error.message, {
+          hideProgressBar: true,
+          position: 'top-center'
+        });
       })
   };
 };

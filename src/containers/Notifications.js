@@ -12,6 +12,7 @@ import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { toast } from "react-toastify";
 import { sortBy } from 'lodash';
+import { Modal } from "@material-ui/core";
 
 TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo('en-US');
@@ -74,18 +75,21 @@ const Notifications = (props) => {
                       allNotifications.length > 0 ? sortBy(allNotifications, [(value) => { return value.time * (-1); }]).filter(({receiver}) => receiver === uid ).map((data, idx) => 
                         <div key={idx}>
                         <p className={data.unread ? 'submenu' : 'submenu isActive'}>
-                          <Link to={`#`} onClick={e => showDetails(data)}>
+                          <Link to={`#`} className="" onClick={e => showDetails(data)}>
                             {data.message}
-                          </Link>        
+                          </Link>
+                          <div className={data.type === 'Invitation' && data.status === "pending" ? 'hide-in-full' : 'hide-in-full hide'}>
+                            <button className="btn-success btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={(e) => acceptOrReject(data, 'accepted')} > Accept </button>
+                            <button className="btn-danger btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={(e) => acceptOrReject(data, 'rejected')} > Reject </button>
+                          </div>
                         </p>
                         <button className="btn-dark btn-sm mb-3" onClick={(e) => markNotificationAsRead(data)} > {data.unread ? 'Mark as read' : 'Mark as unread'} </button>
                         </div>
                       ) : "No notifications found"
-                    }
-                  </div>
+                    } </div>
                 </div>
               </div>
-              <div className="col-md-8">
+              <div className="col-md-8 hide-in-small">
                 <h4 className="page-title pb-3">Notification Details</h4>
 
                 <div className={details ? "carded-table-scroll carded-details" : ""} >

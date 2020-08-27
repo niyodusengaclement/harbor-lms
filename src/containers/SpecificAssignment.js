@@ -149,7 +149,7 @@ const SpecificAssignment = (props) => {
         </TableLayout>
         </div>
         </div>
-        <div className="col">
+        <div className="col reserved-side">
           <h5>Notifications</h5>
         </div>
         </>
@@ -222,7 +222,7 @@ const SpecificAssignment = (props) => {
         </div>
         </div>
         
-        <div className="col">
+        <div className="col reserved-side">
         <div className="vl"></div>
         {
           submission.length > 0 ?

@@ -18,7 +18,7 @@ const ModalLayout = ({ children, handleShow, show, header, handleClick, buttonNa
           {children}
           </div>
           <Modal.Footer>
-            <button className="green-btn" onClick={handleClick}>
+            <button className="blue-btn" onClick={handleClick}>
               {buttonName ? buttonName : 'Submit'}
             </button>
           </Modal.Footer>

@@ -13,8 +13,6 @@ import {
   GET_COURSE_MEMBERS,
   ACTION_START
 } from "../actions/actionTypes";
-import {updateArrOfObj} from '../../helpers/utils';
-
 
 const initialState = {
   isLoading: false,

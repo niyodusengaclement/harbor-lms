@@ -1,4 +1,3 @@
-
 .tbl {
     background-color: white;
     th {
@@ -8,4 +7,9 @@
     tr{
       border: 8px solid #F5F8FF;
     }
+}
+@media screen and (max-width: 991px) {
+  .tbl {
+    width: 100%;
+  }
 }

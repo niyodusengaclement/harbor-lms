@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Form } from 'react-bootstrap';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { getCourseSections } from '../redux/actions/coursesActions';
@@ -31,8 +31,7 @@ const Chat = (props) => {
 
   const user = JSON.parse(localStorage.getItem('rems_user_profile'));
   const userId = localStorage.getItem('rems_user_id');
-  const studentSections = courses.members.length > 0 ? courses.members.filter(({studentUniqueNumber, status}) => studentUniqueNumber === profile.studentUniqueNumber && status === 'accepted') : [];
-
+  const studentSections = courses.members.length > 0 ? courses.members.filter((val) => val.courseId === courseId && val.studentUniqueNumber === profile.studentUniqueNumber && val.status === 'accepted') : [];
   const sections = profile.role !== 'student' ? courses.sections : studentSections ;
   useFirestoreConnect({
     collection: `chats`,
@@ -107,6 +106,19 @@ const Chat = (props) => {
   : <p className="pl-3">No message found</p>;
   return (
     <div>
+    <div className="pl-2 hide-in-full">
+     <Form.Group>
+       <Form.Control as="select" value={section} onChange={e => changeSection(e.target.value)}>
+         <option disabled>Select a Section</option>
+         {
+           sections.length > 0 ? sections.map(({sectionId, sectionName}) =>
+           <option key={sectionId} value={sectionId}> {sectionName}</option>
+           )
+           : null
+         }
+       </Form.Control>
+     </Form.Group>
+    </div>
       <div className="chat">
       {
         allChats.length > 0 ? sortBy(allChats, [(msg) => { return msg.time; }]).map((myChat, idx) => 
@@ -139,7 +151,7 @@ const Chat = (props) => {
       
       </div>
     
-      <div className="card online-users">
+      <div className="card online-users hide-in-small">
         <div className="card-header">
           Chat
         </div>

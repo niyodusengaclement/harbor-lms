@@ -126,7 +126,7 @@ const Submissions = (props) => {
           }
         </div>
         </div>
-        <div className="col">
+        <div className="col reserved-side">
         <div className="vl"></div>
           <div className="right-sidebar">
           <strong>Submitted by: </strong>

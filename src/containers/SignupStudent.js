@@ -108,9 +108,12 @@ const getStudentUniqueNumber = async () => {
                     <img src={lightBulb} alt="" className="signup__img--bulb"/>
                     <img src={line} alt="" className="signup__img--line__bottom"/>
                 </div>
-                <div className="signup--form">
+                <div className="signup--form login--form">
                     <AlertComponent isError={errorMsg ? true : false} message={errorMsg} />
                     <AlertComponent isSuccess={successMsg ? true : false } message={successMsg}/>
+                    <div className="in-small">
+                        <h2>REMS Registration</h2>
+                    </div>
                     <div className="signup--form--title">
                         <Text label="Registration" className="txt txt--fontSize__large" />
                         <Text linkLabel="Instructor" linkAddress="/signup/instructor" className="txt txt--fontSize__medium" location={props.location} />

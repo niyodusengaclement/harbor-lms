@@ -170,7 +170,7 @@ const Notes = (props) => {
               <hr />
             </div>
 
-          <div className={noteDetails.isFile ? '' : "carded-table-scroll carded-details " } >
+          <div className={noteDetails.isFile ? '' : "carded-table-scroll carded-details" } >
             <div className="p-3">
             {
 
@@ -225,7 +225,7 @@ const Notes = (props) => {
           </TableLayout>
         </div>
         </div>
-        <div className="col">
+        <div className="col reserved-side">
         </div>
         </>
     </SpecificCourse>

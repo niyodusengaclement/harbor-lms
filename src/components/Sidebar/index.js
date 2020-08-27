@@ -9,7 +9,7 @@ import { instructor, student } from "./menu";
 import { connect, useSelector } from "react-redux";
 import Badge from '@material-ui/core/Badge';
 import { useFirestoreConnect } from "react-redux-firebase";
-import { getProfile } from "../../helpers/utils";
+import { getProfile, autoCapFirstLetter } from "../../helpers/utils";
 
 const Sidebar = (props) => {
 	const {userProfile} = props;
@@ -27,7 +27,12 @@ const Sidebar = (props) => {
     Object.values(notifications).map((msg) => allNotifications.push(msg));
   }
 	const count = allNotifications.length > 0 ? allNotifications.filter(({receiver, unread}) => receiver === uid && unread).length : 0;
- 
+	const hideSidebar = () => {
+    document.getElementById('side-nav-small').style.display = 'none';
+    document.getElementById('top-toggle-close').style.display = 'none';
+    document.getElementById('top-toggle-open').style.display = 'block';
+  }
+
   return (
     <div >
 			<div id="sidebar" className="sidebar">
@@ -37,7 +42,7 @@ const Sidebar = (props) => {
 							<div className="photo">
 								<img alt="" className="avatar rounded-circle" src={userProfile.schoolLogo ? userProfile.schoolLogo : schoolImg}/>
 							</div>
-							<span className="">{userProfile.school} </span>
+							<span className="school-name">{userProfile.school} </span>
 						</div>
 					<ul className="nav">
 
@@ -61,10 +66,10 @@ const Sidebar = (props) => {
                   </div>
                   <div className="left-sidebar-footer-block-info">
                     <strong className="left-sidebar-footer-block-info-name">{ !userProfile.fullName ? '' : userProfile.fullName.length < 9 ? userProfile.fullName.substr(0, 9) : `${userProfile.fullName.substr(0, 7)}...`} </strong>
-                    <p className="left-sidebar-footer-block-info-role">{userProfile.role}</p>
+                    <p className="left-sidebar-footer-block-info-role">{userProfile.role ? autoCapFirstLetter(userProfile.role) : ''}</p>
                   </div>
                   <div className="left-sidebar-footer-block-right">
-                    <img  alt="" src={Indent50}/>
+                    <img className="sidenav-hider hide-in-full" onClick={hideSidebar} alt="" src={Indent50}/>
                   </div>
                 </div>
               </div>

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import "../assets/styles/styles.scss";
+import React, { useState } from 'react';
+import { Modal } from 'react-bootstrap';
+import "../assets/styles/card.scss";
 import { useDropzone } from 'react-dropzone'; 
 import uploadIcon from "../assets/images/icons/uploadIcon.png";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +10,7 @@ import { connect } from "react-redux";
 import { getProfile } from "../helpers/utils";
 import { toast } from "react-toastify";
 
-const NewCourseModal = (props) => {
+const NewCourseModal = ({ handleShow, show, ...props }) => {
   const [coverImage, setcoverImage] = useState([]);
   const [courseName, setcourseName] = useState('');
   const [courseCode, setcourseCode] = useState('');
@@ -17,10 +18,8 @@ const NewCourseModal = (props) => {
   const [courseDescription, setcourseDescription] = useState('');
   const { uid } = getProfile();
 
-  const toggleCourseModal = () => {
-    const el = document.getElementById('newCourseModal');
-    const el1 = el.style.display === 'none' ? el.style.display = 'block' : el.style.display = 'none';
-  }
+  const handleClose = () => handleShow();
+
   const { getRootProps, isDragActive, isDragReject, isDragAccept, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
@@ -45,7 +44,7 @@ const NewCourseModal = (props) => {
       data.imageUrl = url;
       props.saveCourse(data);
       clearInput()
-      toggleCourseModal();
+      handleClose();
     })
     .catch(err => console.log(err));
   
@@ -79,7 +78,7 @@ const NewCourseModal = (props) => {
       else {
         props.saveCourse(data);
         clearInput()
-        toggleCourseModal();
+        handleClose();
       }
     }
   }
@@ -98,19 +97,16 @@ const NewCourseModal = (props) => {
     setcourseCredit('');
     setcoverImage([]);
   }
-
-  return (
-    <>
-    <div className="modal" id="newCourseModal">
-      <div className="modal-dialog modal-lg">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title m-title pl-2" id="newCourseModalLabel">Create a new course</h5>
-            <button type="button" className="close" onClick={toggleCourseModal}>
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
+  
+    return (
+      <>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>
+            <h6 className="modal-title m-title" >Create a new course</h6>
+            </Modal.Title>
+          </Modal.Header>
+          <div className="modal-body-scroll">
             <div className="row pl-2 pr-2">
               <div className="col-md-6">
                 <form onSubmit={SendHandler}>
@@ -181,16 +177,17 @@ const NewCourseModal = (props) => {
               </div>
             </div>
           </div>
-          <div className="modal-footer">
-            <button type="button" className="blue-btn" onClick={SendHandler}><span>Create course</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    </>
-);
-};
+          <Modal.Footer>
+            <button className="blue-btn" onClick={SendHandler}>
+            Save
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  }
 
 export default connect(null, {
   saveCourse: createCourse
 }) (NewCourseModal);
+  

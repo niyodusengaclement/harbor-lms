@@ -123,18 +123,24 @@
 
 @media screen and (max-width: 768px) {
   .chat {
-    margin-left: 20px;
-    width: 378px;
+    width: 320px !important;
+    margin-left: 0px;
   }
   .chat-card {
-    width: 370px;
+    width: 314px !important;
   }
   .online-users {
     width: 170px;
   }
   .chat_footer {
-    width: 370px;
+    width: 270px;
     top: 28rem;
-    margin-left: 20px;
+    margin-left: 0px;
+  }
+  .time-right {
+    padding-top: 20px;
+  }
+  .time-left {
+    padding-top: 20px;
   }
 }

@@ -15,8 +15,8 @@
   margin-left: -12px !important;
   margin-right: -10px !important;
   margin-top: -18px !important;
-
 }
+
 .card-font{
   font-style: normal;
   font-weight: normal;
@@ -178,11 +178,18 @@
 .large-card {
   position: fixed;
   height: 550px;
-  width: 358px;
+  width: 318px;
   overflow-y: auto;
 }
 .large-card-content {
   width: 350px;
+}
+.course-title-small {
+  display: none !important;
+}
+
+.hide-in-full {
+  display: none;
 }
 
 @media screen and (max-width: 1001px) {
@@ -193,5 +200,62 @@
 @media screen and (max-width: 768px) {
   .submenu-small {
     width: 130px;
+  }
+}
+@media screen and (max-width: 991px) {
+  .submenu-col {
+    display: none;
+  }
+
+  .carded-table-scroll {
+    width: 83%;
+  }
+  .course-title-small {
+    background-color: $color-primary;
+    width: 90%;
+    text-align: center;
+    outline: none;
+    button {
+      outline: none;
+      background-color: $color-primary;
+      border: none;
+    }
+  }
+  .reserved-side {
+    display: none;
+  }
+  h3 {
+    width: 90%;
+  }
+
+  .course-title-small {
+    display: block !important;
+  }
+
+  .course-title {
+    margin-top: 10px;
+  }
+  
+.card-block {
+  margin-left: -5px !important;
+  margin-right: -5px !important;
+}
+  .large-table {
+    width: 90% !important;
+    left: 20px;
+    margin-top: 50px;
+  }
+
+  .large-card {
+    width: 90%;
+  }
+
+  .hide-in-small {
+    display: none;
+  }
+  
+  .hide-in-full {
+    display: block;
+    width: 90%;
   }
 }

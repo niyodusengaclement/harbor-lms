@@ -10,55 +10,54 @@ import Text from '../components/Text';
 import {connect} from 'react-redux';
 import {login} from '../redux/actions/authActions';
 import { Spinner } from 'react-bootstrap';
-import AlertComponent from '../components/Alert';
+import { toast } from 'react-toastify';
 import {Redirect} from 'react-router-dom';
 
 const Login =(props) => {
     const [emailOrStudentUniqueNumber,setEmailOrStudentUniqueNumber] = useState();
     const [password, setPassword] = useState();
-    const [isLoading, setIsLoading] = useState('');
-    const [errorMsg,setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
-
+    
     const isInitialMount = useRef(true);
 
+    const onError = (error) => {
+        toast.error(error, {
+          position: 'top-center',
+          hideProgressBar: true,
+        });
+      }
+      
     useEffect(()=>{
         if (isInitialMount.current) {
             isInitialMount.current = false;
          } else {
-             if(props.authError) {setErrorMsg(`${props.authError.message} Or invalid SUN`);};
              if(props.authResponse && props.authResponse.message === 'success') {setSuccessMsg('Successfully logged in!');}
          }
     },[props.authError,props.authResponse]);
+
     const handleChange = (target) => {
-        setErrorMsg('');
-        setSuccessMsg('');
         target.name === 'emailOrStudentUniqueNumber' ? setEmailOrStudentUniqueNumber(target.value)
         : target.name === 'password' ? setPassword(target.value)
         : void(0);
     }
     const handleClick = (target) => {
-        setErrorMsg('');
-        setSuccessMsg('');
-        setIsLoading(true);
         if(emailOrStudentUniqueNumber && password){
-            props.login({emailOrStudentUniqueNumber,password});
-            if(!props.authError)setErrorMsg(null); 
+            return props.login({emailOrStudentUniqueNumber,password});
         }
-        else {setErrorMsg('Fill in all the required fields');};
+        else {
+            return onError('Fill all required fields please');
+        };
     }
-    if(!errorMsg && props.authError) {setErrorMsg(props.authError.message)};
     const redirectTo = (location) => {
         return (<Redirect to={location} />)
     }
 
-    if(isLoading && errorMsg) setIsLoading(false);
     return(
         <div>
             <Spinner
             animation="border"
             variant="primary"
-            className={isLoading ? 'spinner--position__center' : 'hide'}
+            className={props.loading ? 'spinner--position__center' : 'hide'}
             />
             {successMsg && !props.loading ? redirectTo('/dashboard') : ''}
             <div className="signup--container">
@@ -74,10 +73,11 @@ const Login =(props) => {
                     <img src={line} alt="" className="signup__img--line__bottom"/>
                 </div>
                 <div className="signup--form login--form">
-                    <AlertComponent isError={errorMsg ? true : false} message={errorMsg} />
-                    <AlertComponent isSuccess={successMsg ? true : false } message={successMsg}/>
                     <div className="signup--form--title login--form--title">
                         <Text label="Login" className="txt txt--fontSize__large" />
+                    </div>
+                    <div className="in-small">
+                        <h2>REMS Login</h2>
                     </div>
                     <div className="signup--form--rows">
                         <div className="signup--form--row">

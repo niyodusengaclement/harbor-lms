@@ -90,7 +90,7 @@ const CourseSection = (props) => {
         </TableLayout>
         </div>
         </div>
-        <div className="col">
+        <div className="col reserved-side">
           <h5>Notifications</h5>
         </div>
         </>

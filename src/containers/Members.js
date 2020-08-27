@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import TableLayout from "../components/TableLayout";
 import { Spinner } from "react-bootstrap";
 import { useFirestoreConnect } from "react-redux-firebase";
+import { autoCapFirstLetter } from "../helpers/utils";
 
 const Members = (props) => {
   const [ show, setShow ] = useState(false);
@@ -93,14 +94,16 @@ const Members = (props) => {
   />
   : "No Data found";
   const user = JSON.parse(localStorage.getItem('rems_user_profile'));
+  const buttons = [
+    {
+      name: 'Invite members',
+      clickHandler: handleShow
+    },
+  ];
+
 
   return (
-    <SpecificCourse page={`${localStorage.getItem('courseName')} > Members`} submenu="Members">
-      {
-        user.role === 'instructor' ?
-          <button name="invite" id="invite" onClick={handleShow} className="members--btn__top blue-btn" > Invite members </button>
-        : null
-      }
+    <SpecificCourse page={`${localStorage.getItem('courseName')} > Members`} submenu="Members" buttons={buttons}>
 
       <ModalLayout handleShow={handleShow} handleClick={handleClick} show={show} header="Invite members" buttonName="Invite">
         <div className="p-3">
@@ -141,9 +144,9 @@ const Members = (props) => {
             <tr key={idx}>
               <td>{fullName}</td>
               <td>{studentUniqueNumber ? studentUniqueNumber : email}</td>
-              <td>{role}</td>
+              <td>{autoCapFirstLetter(role)}</td>
               <td>{sectionName}</td>
-              <td>{status}</td>
+              <td>{autoCapFirstLetter(status)}</td>
             </tr>
             )
             : "No data found"

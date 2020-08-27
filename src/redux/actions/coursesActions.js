@@ -183,7 +183,7 @@ export const getCourseSectionBySectionId = (courseId, sectionId) => {
         payload: sectionData,
       });
     } catch (error) {
-      console.log("error: ", error);
+      console.error("error: ", error);
     }
   };
 };
@@ -235,7 +235,7 @@ export const deleteCourseSection = (courseId, sectionId) => {
         payload: 'section deleted with success',
       });
     } catch (error) {
-      console.log("error : ", error);
+      console.error("error : ", error);
 
     }
   };
