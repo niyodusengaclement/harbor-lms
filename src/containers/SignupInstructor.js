@@ -76,7 +76,7 @@ const Signup =(props) => {
             <div className="signup--container">
                 
                 <div className="signup--section">
-                    <div><Text label="RWANDA EDUCATION MANAGEMENT SYSTEM (REMS)" className="txt txt--fontSize__medium txt--logo signup--logo" /></div>
+                    <div><Text label="Harbor Learning Management System" className="txt txt--fontSize__medium txt--logo signup--logo" /></div>
                     <div><img src={desktopImage} alt="" className="signup__img--desktopImage"/></div>
                     <div><img src={motto} alt="" className="signup__img--motto"/></div>         
                 </div>

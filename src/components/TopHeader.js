@@ -25,7 +25,7 @@ const TopHeader = (props) => {
       <div className="main-header">
         <div className="logo-header">
           <Link to="#" className="logo">
-            GORILLA LMS
+            Harbor LMS
           </Link>
           <button className="navbar-toggler sidenav-toggler ml-auto" type="button" onClick={showOrHideSidebar}>
             <span className="navbar-toggler-icon"><FontAwesomeIcon className="top-icons" icon={faBars} /></span>
