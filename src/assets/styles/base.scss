@@ -12,11 +12,6 @@ $font-family:"times, roboto, arial, 'Times New Roman'";
 }
 
 @mixin vertical-center {
-    .embedded {
-        button {
-            background-color: aqua;
-        }
-    }
     margin: 0;
     position: absolute;
     top: 50%;
