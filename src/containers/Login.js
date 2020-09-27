@@ -77,7 +77,7 @@ const Login =(props) => {
                         <Text label="Login" className="txt txt--fontSize__large" />
                     </div>
                     <div className="in-small">
-                        <h2>REMS Login</h2>
+                        <h2>Login</h2>
                     </div>
                     <div className="signup--form--rows">
                         <div className="signup--form--row">
@@ -90,7 +90,7 @@ const Login =(props) => {
                             <Button name="login" label="Login" handleClick={handleClick}/>   
                         </div>
                         <div className="signup--form--footer login--form--footer"> 
-                            <Text label="New to REMS ? Create account " linkLabel="here" linkAddress="/signup/student" className="txt"  exception={true} />
+                            <Text label="New to Harbor Institute ? Create account " linkLabel="here" linkAddress="/signup/student" className="txt"  exception={true} />
                     </div>
                     </div>
                 </div>

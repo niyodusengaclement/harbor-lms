@@ -89,7 +89,7 @@ const Signup =(props) => {
                     <AlertComponent isError={errorMsg ? true : false} message={errorMsg} />
                     <AlertComponent isSuccess={successMsg ? true : false } message={successMsg}/>
                     <div className="in-small">
-                        <h2>REMS Registration</h2>
+                        <h2>Registration</h2>
                     </div>
                     <div className="signup--form--title">
                         <Text label="Registration" className="txt txt--fontSize__large" />
@@ -122,7 +122,7 @@ const Signup =(props) => {
                             className="input__large" 
                             handleChange={handleChange} 
                             />
-                        <InputField type="checkbox" name="termsAgreement" label="I agree to REMS terms and conditions." className="signup--form--checkbox input--checkbox" handleChange={handleChange} />
+                        <InputField type="checkbox" name="termsAgreement" label="I agree to Harbor LMS terms and conditions." className="signup--form--checkbox input--checkbox" handleChange={handleChange} />
                         <div className="signup--form--btn"> 
                             <Button name="Register" label="Register" handleClick={handleClick}/>   
                         </div>

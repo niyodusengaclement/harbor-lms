@@ -112,7 +112,7 @@ const getStudentUniqueNumber = async () => {
                     <AlertComponent isError={errorMsg ? true : false} message={errorMsg} />
                     <AlertComponent isSuccess={successMsg ? true : false } message={successMsg}/>
                     <div className="in-small">
-                        <h2>REMS Registration</h2>
+                        <h2>Registration</h2>
                     </div>
                     <div className="signup--form--title">
                         <Text label="Registration" className="txt txt--fontSize__large" />
@@ -137,7 +137,7 @@ const getStudentUniqueNumber = async () => {
                             <InputField type="password" id="password" name="password" placeholder="password" className="input__medium" required={true} handleChange={handleChange} />
                             <InputField type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" className="input__medium" required={true} handleChange={handleChange} />
                         </div>
-                        <InputField type="checkbox" name="termsAgreement" label="I agree to REMS terms and conditions." className="signup--form--checkbox input--checkbox" handleChange={handleChange} />
+                        <InputField type="checkbox" name="termsAgreement" label="I agree to Harbor LMS terms and conditions." className="signup--form--checkbox input--checkbox" handleChange={handleChange} />
                         <div className="signup--form--btn"> 
                             <Button name="Register" label="Register" handleClick={handleClick}/>   
                         </div>
