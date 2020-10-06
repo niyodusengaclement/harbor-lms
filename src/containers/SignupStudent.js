@@ -116,9 +116,9 @@ const getStudentUniqueNumber = async () => {
                     </div>
                     <div className="signup--form--title">
                         <Text label="Registration" className="txt txt--fontSize__large" />
-                        <Text linkLabel="Instructor" linkAddress="/signup/instructor" className="txt txt--fontSize__medium" location={props.location} />
+                        {/* <Text linkLabel="Instructor" linkAddress="/signup/instructor" className="txt txt--fontSize__medium" location={props.location} />
                         <Text label="|" className="txt" />
-                        <Text linkLabel="Student" linkAddress="/signup/student" className="txt txt--fontSize__medium" location={props.location} linkActiveStatus={true} />
+                        <Text linkLabel="Student" linkAddress="/signup/student" className="txt txt--fontSize__medium" location={props.location} linkActiveStatus={true} /> */}
                     </div>
                     <div className="signup--form--rows">
                         <div className="signup--form--row">

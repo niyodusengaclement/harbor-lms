@@ -3,7 +3,7 @@ import "../../assets/styles/styles.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import userGrey from '../../assets/images/avatars/userGrey.png';
 import Indent50 from '../../assets/images/icons/Indent50.png';
-import schoolImg from '../../assets/images/circle50.png';
+import logo from '../../assets/images/logo.png';
 import { NavLink } from "react-router-dom";
 import { instructor, student } from "./menu";
 import { connect, useSelector } from "react-redux";
@@ -40,9 +40,9 @@ const Sidebar = (props) => {
 						{/* We will retrieve all the info in db according to the user */}
 						<div className="companyImg">
 							<div className="photo">
-								<img alt="" className="avatar rounded-circle" src={userProfile.schoolLogo ? userProfile.schoolLogo : schoolImg}/>
+								<img alt="" className="avatar rounded-circle" src={userProfile.schoolLogo ? userProfile.schoolLogo : logo}/>
 							</div>
-							<span className="school-name">{userProfile.school} </span>
+							{/* <span className="school-name">{userProfile.school} </span> */}
 						</div>
 					<ul className="nav">
 

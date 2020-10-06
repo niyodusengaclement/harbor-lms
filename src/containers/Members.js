@@ -5,7 +5,7 @@ import {getStudents} from '../redux/actions/studentsActions';
 import {connect, useSelector} from 'react-redux';
 import '../assets/styles/styles.scss';
 import '../assets/styles/card.scss';
-import {getCourseMembers, addCourseMembers, getCourseSections} from '../redux/actions/coursesActions';
+import { addCourseMembers, getCourseSections} from '../redux/actions/coursesActions';
 import ModalLayout from "../components/ModalLayout";
 import Select from 'react-select'
 import { toast } from "react-toastify";
@@ -93,7 +93,6 @@ const Members = (props) => {
     className={props.courses.isLoading ? 'spinner--position__center' : 'hide'}
   />
   : "No Data found";
-  const user = JSON.parse(localStorage.getItem('rems_user_profile'));
   const buttons = [
     {
       name: 'Invite members',

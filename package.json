@@ -1,5 +1,5 @@
 {
-  "name": "rems",
+  "name": "harbor-lms",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,7 +15,8 @@
     "bootstrap": "^4.5.0",
     "cloudinary-react": "^1.6.2",
     "dotenv": "^8.2.0",
-    "firebase": "^7.16.1",
+    "firebase": "^7.22.1",
+    "flutterwave-react-v3": "^1.0.7",
     "install": "^0.13.0",
     "javascript-time-ago": "^2.0.13",
     "lodash": "^4.17.19",

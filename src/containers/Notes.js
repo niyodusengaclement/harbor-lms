@@ -11,7 +11,6 @@ import ModalLayout from "../components/ModalLayout";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import TableLayout from "../components/TableLayout";
-import { student } from "../components/Sidebar/menu";
 
 const Notes = (props) => {
   const [ show, setShow ] = useState(false);

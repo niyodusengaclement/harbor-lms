@@ -4,11 +4,9 @@ import { connect, useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { getAllMembers } from "../../redux/actions/coursesActions";
-import { getProfile } from "../../helpers/utils";
 
 const StudentDashboard = (props) => {
   const { values, isLoading } = props.courses;
-  const { uid, role } = getProfile();
   const { profile } = props;
   const { members } = props.courses;
 

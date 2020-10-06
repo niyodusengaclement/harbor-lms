@@ -5,20 +5,27 @@ import NotificationImg from "../assets/images/not.jpg";
 import { Link } from "react-router-dom";
 import { useSelector, connect } from "react-redux";
 import TopHeader from "../components/TopHeader";
-import { Badge } from "react-bootstrap";
-import { getProfile } from "../helpers/utils";
+import { Badge, Form } from "react-bootstrap";
+import { currencyConverter, getProfile } from "../helpers/utils";
 import { markAsRead, acceptOrRejectInvitation } from "../redux/actions/invitationsActions";
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 import { toast } from "react-toastify";
 import { sortBy } from 'lodash';
-import { Modal } from "@material-ui/core";
+import { useFlutterwave } from 'flutterwave-react-v3';
+import { getSingleCourse } from "../redux/actions/coursesActions";
+import { Modal, Button } from 'react-bootstrap';
 
 TimeAgo.addLocale(en);
 const timeAgo = new TimeAgo('en-US');
 
 const Notifications = (props) => {
   const [ details, setDetails ] = useState(null);
+  const { courses } = props;
+  const [ show, setShow ] = useState(false);
+  const [ notificationDetails, setNotificationDetails ] = useState();
+  const [ currency, setCurrency ] = useState("RWF");
+  const [ USD, setUSDValue ] = useState();
 
   useFirestoreConnect({
     collection: `notifications`,
@@ -42,25 +49,83 @@ const Notifications = (props) => {
   const markNotificationAsRead = (data, isRead) => props.markNotificationAsRead(data, isRead);
 
   const showDetails = (val) => {
+    props.getSingleCourse(val.courseId)
     setDetails(val);
     markNotificationAsRead(val, true);
   };
 
   const acceptOrReject = (data, state) => {
     if(!data.docId) {
-      return toast.error('Action cannot be proccessed, Invitation might be cancelled by the Inviter', {
+      return toast.error('Action cannot be proccessed, Invitation might be cancelled', {
         position: 'top-center',
         hideProgressBar: true,
       })
     }
     props.acceptOrRejectInvitation(data, state);
+    
   };
-  const { uid } = getProfile();
+  const { uid, ...rest } = getProfile();
+
+  const config = {
+    public_key: process.env.REACT_APP_FLUTTERWAVE_KEY,
+    tx_ref: Date.now(),
+    amount: currency ==="RWF" ? courses.singleCourse.price : USD,
+    currency: currency,
+    payment_options: 'card, mobilemoney, account, bank transfer, wechat, ussd',
+    customer: {
+      email: rest ? rest.email : 'clementmistico@gmail.com',
+      phonenumber: rest ? rest.phoneNumber : '',
+      name: rest ? rest.fullName : '',
+    },
+    customizations: {
+      title: 'Harbor LMS',
+      description: 'Thanks for registering in a course',
+      logo: null,
+    },
+};
+
+const handleFlutterPayment = useFlutterwave(config);
+
+const handleContinue = async (inviteDetails) => {
+  const cur = await currencyConverter(courses.singleCourse.price);
+  if(!cur.error) setUSDValue(cur);
+  setShow(!show);
+  setNotificationDetails(inviteDetails);
+}
+const checkout = () => {
+  handleFlutterPayment({
+    callback: () => {
+      acceptOrReject(notificationDetails, 'accepted');
+    },
+    onClose: () => {},
+  });
+}
   return (
     <div className="wrapper">
       <TopHeader
 				page={` Notifications`}
 			/>
+      <Modal show={show} onHide={setShow} >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            Select currency
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form>
+        <Form.Group>
+          <Form.Control as="select" value={currency} onChange={(e) => setCurrency(e.target.value)} custom>
+            <option value="RWF">Rwandan Franc (RWF)</option>
+            <option value="USD">United State Dollar (USD)</option>
+          </Form.Control>
+        </Form.Group>
+        </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={checkout}>Continue</Button>
+        </Modal.Footer>
+      </Modal>
+      
       {/* Main panel */}
 			<div className="main-panel">
 				<div className="content">
@@ -78,9 +143,11 @@ const Notifications = (props) => {
                           <Link to={`#`} className="" onClick={e => showDetails(data)}>
                             {data.message}
                           </Link>
+                          <div className={details ? '' : 'hide'}>
                           <div className={data.type === 'Invitation' && data.status === "pending" ? 'hide-in-full' : 'hide-in-full hide'}>
-                            <button className="btn-success btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={(e) => acceptOrReject(data, 'accepted')} > Accept </button>
+                            <button className="btn-success btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={() => handleContinue(data)} > Accept </button>
                             <button className="btn-danger btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={(e) => acceptOrReject(data, 'rejected')} > Reject </button>
+                          </div>
                           </div>
                         </p>
                         <button className="btn-dark btn-sm mb-3" onClick={(e) => markNotificationAsRead(data)} > {data.unread ? 'Mark as read' : 'Mark as unread'} </button>
@@ -108,7 +175,7 @@ const Notifications = (props) => {
                         <span> {timeAgo.format(new Date(details.time), 'ago')}</span>
                       </div>
                       <div className={details.type === 'Invitation' && details.status === "pending" ? '' : 'hide'}>
-                        <button className="btn-success btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={(e) => acceptOrReject(details, 'accepted')} > Accept </button>
+                        <button className="btn-success btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={() => handleContinue(details)} > Accept </button>
                         <button className="btn-danger btn-sm mt-5 ml-3 mr-3 pl-3 pr-3" onClick={(e) => acceptOrReject(details, 'rejected')} > Reject </button>
                       </div>
                     </div>
@@ -127,7 +194,11 @@ const Notifications = (props) => {
   );
 };
 
-export default connect(null, {
+const mapState = ({ courses }) => ({
+  courses
+})
+export default connect(mapState, {
+  getSingleCourse: getSingleCourse,
   markNotificationAsRead: markAsRead,
   acceptOrRejectInvitation: acceptOrRejectInvitation
 })(Notifications);

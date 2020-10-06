@@ -11,7 +11,8 @@ import {
   UPDATE_COURSE_SECTION_FAILURE,
   UPDATE_COURSE_MEMBERS,
   GET_COURSE_MEMBERS,
-  ACTION_START
+  ACTION_START,
+  GET_SINGLE_COURSE_SUCCESS
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
   values: [],
   sections: [],
   section: {},
+  singleCourse: {},
   members: [],
 };
 
@@ -43,6 +45,13 @@ export default (state = initialState, { type, payload }) => {
         isLoaded: true,
         isLoading: false,
         values: [...state.values, payload],
+      };
+    case GET_SINGLE_COURSE_SUCCESS:
+      return {
+        ...state,
+        isLoaded: true,
+        isLoading: false,
+        singleCourse: payload,
       };
     case GET_COURSE_SUCCESS:
       return {

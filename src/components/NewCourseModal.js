@@ -15,6 +15,7 @@ const NewCourseModal = ({ handleShow, show, ...props }) => {
   const [courseName, setcourseName] = useState('');
   const [courseCode, setcourseCode] = useState('');
   const [courseCredit, setcourseCredit] = useState('');
+  const [coursePrice, setcoursePrice] = useState('');
   const [courseDescription, setcourseDescription] = useState('');
   const { uid } = getProfile();
 
@@ -52,7 +53,7 @@ const NewCourseModal = ({ handleShow, show, ...props }) => {
   const SendHandler = (e) => {
     e.preventDefault();
 
-    if(courseCode === '' || courseCredit === '' || courseName === '' || courseDescription === '') {
+    if(courseCode === '' || courseCredit === '' || coursePrice === '' || courseName === '' || courseDescription === '') {
       return toast.error('Fill all required fields',{
         position: 'top-center',
         hideProgressBar: true,
@@ -67,6 +68,7 @@ const NewCourseModal = ({ handleShow, show, ...props }) => {
         name: courseName,
         code: courseCode,
         credit: courseCredit,
+        price: coursePrice,
         description: courseDescription,
         hasImage: coverImage[0] !== undefined ? true : false,
         isPublished: false,
@@ -87,6 +89,7 @@ const NewCourseModal = ({ handleShow, show, ...props }) => {
     evt.target.name === 'name' ? setcourseName(evt.target.value)
     : evt.target.name === 'code' ? setcourseCode(evt.target.value)
     : evt.target.name === 'credit' ? setcourseCredit(evt.target.value)
+    : evt.target.name === 'price' ? setcoursePrice(evt.target.value)
     : evt.target.name === 'description' ? setcourseDescription(evt.target.value)
     : void(0);
   }
@@ -95,6 +98,7 @@ const NewCourseModal = ({ handleShow, show, ...props }) => {
     setcourseDescription('');
     setcourseCode('');
     setcourseCredit('');
+    setcoursePrice('');
     setcoverImage([]);
   }
   
@@ -125,6 +129,10 @@ const NewCourseModal = ({ handleShow, show, ...props }) => {
                   <div className="form-group">
                     <label htmlFor="description">Description<span className="required"> *</span></label>
                     <textarea type="text" className="form-control" value={courseDescription} name="description" onChange={changeHandler} placeholder="Course description" row="4"/>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="description">Course Price<span className="required"> *</span></label>
+                    <input type="number" className="form-control" value={coursePrice} name="price" onChange={changeHandler} placeholder="eg: 50000" />
                   </div>
                 </form>
               </div>

@@ -1,7 +1,6 @@
 import {
   CREATE_COURSE_FAILURE,
   CREATE_COURSE_SUCCESS,
-  GET_COURSE_FAILURE,
   GET_COURSE_SUCCESS,
   CREATE_COURSE_START,
   CREATE_COURSE_SECTION_SUCCESS,
@@ -14,13 +13,13 @@ import {
   UPDATE_COURSE_MEMBERS,
   GET_COURSE_MEMBERS,
   GET_COURSE_MEMBERS_ERROR,
-  ACTION_START
+  ACTION_START,
+  GET_SINGLE_COURSE_SUCCESS,
 
 } from "./actionTypes";
 import actionCreator from "./actionCreator";
 import { toast } from "react-toastify";
 import { getProfile } from "../../helpers/utils";
-import { faLongArrowAltRight } from "@fortawesome/free-solid-svg-icons";
 
 export const createCourse = (newCourse) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
@@ -76,6 +75,31 @@ export const getCourses = () => {
   };
 };
 
+export const getSingleCourse = (id) => {
+  return async (dispatch, getState, { getFirebase, getFirestore }) => {
+    try {
+      const firestore = getFirestore();
+      dispatch(actionCreator(CREATE_COURSE_START));
+      const courseRef = firestore.collection("courses").doc(id);
+      const crs = await courseRef.get();
+      if (!crs.exists) {
+        toast.error('Course not found', {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+      } else {
+        return dispatch(actionCreator(GET_SINGLE_COURSE_SUCCESS, crs.data()));
+      }
+    } catch (err) {
+      toast.error(err, {
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
+    }
+  };
+};
+
 export const publishOrUnpublishCourses = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
@@ -104,7 +128,6 @@ export const createCourseSection = (
   section,
   setShow,
   setIsLoading,
-  setIsPageRefreshed
 ) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {
@@ -189,7 +212,6 @@ export const getCourseSectionBySectionId = (courseId, sectionId) => {
 };
 
 export const updateCourseSection = (
-  courseId,
   sectionId,
   updates,
   setShow,
