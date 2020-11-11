@@ -1,12 +1,12 @@
 @import "./base.scss";
 * {
-  font-family: $font-family ;
+  font-family: $font-family;
 }
 .course-card {
   min-height: 200px;
   margin-top: -20px;
   margin-bottom: 40px;
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 }
@@ -17,7 +17,7 @@
   margin-top: -18px !important;
 }
 
-.card-font{
+.card-font {
   font-style: normal;
   font-weight: normal;
   font-size: $font-size-small;
@@ -25,23 +25,23 @@
   margin-top: -13px !important;
 }
 
-.course-image{
+.course-image {
   height: 110px;
   border-radius: 3px;
 }
 
-.course-title a{
+.course-title a {
   text-decoration: none;
   font-weight: bold;
-	font-size: 16px;
-	line-height: 16px;
-	color: #000000;
+  font-size: 16px;
+  line-height: 16px;
+  color: #000000;
 }
 
 .submenu a {
   text-decoration: none;
-	font-size: 16px;
-	line-height: 16px;
+  font-size: 16px;
+  line-height: 16px;
   color: #000000;
 }
 .carded-table {
@@ -85,7 +85,7 @@
   -moz-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-  background-color: #F5F8FF;
+  background-color: #f5f8ff;
   border-radius: 5px;
 }
 .submenu a:hover {
@@ -94,27 +94,37 @@
 .shift-up {
   margin-top: -10px;
 }
-.ql-editor{
-  min-height:200px;
+.ql-editor {
+  min-height: 200px;
 }
-.isActive a{
+.isActive a {
   color: $color-primary;
 }
-.publish-unpublish-btn{
-	position: absolute;  
-	right: 10px;
+
+.btn-left {
+  left: 10px;
+}
+
+.btn-right {
+  right: 10px;
+}
+
+.blue-color {
+  background: #3359df;
+}
+.publish-unpublish-btn {
+  position: absolute;
   top: 80px;
   padding: 2px 4px;
-	background: #3359DF;
-	border: 1px solid #C4C4C4;
-	box-sizing: border-box;
+  border: 1px solid #c4c4c4;
+  box-sizing: border-box;
   border-radius: 3px;
   font-size: 12px;
-	color: #FFFFFF;
+  color: #ffffff;
 }
 .bagde-published {
-  background-color: #EDF9FC;
-  color: #66B848;
+  background-color: #edf9fc;
+  color: #66b848;
   font-weight: normal;
   width: 90px;
   height: 18px;
@@ -123,7 +133,7 @@
   }
 }
 .bagde-unpublished {
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   color: black;
   font-weight: normal;
   width: 90px;
@@ -161,7 +171,7 @@
 }
 
 .vl {
-  border-left: 1px solid rgba(0, 0, 0, 0.20);
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
   height: 80%;
   position: absolute;
   margin-left: -10px;
@@ -235,11 +245,11 @@
   .course-title {
     margin-top: 10px;
   }
-  
-.card-block {
-  margin-left: -5px !important;
-  margin-right: -5px !important;
-}
+
+  .card-block {
+    margin-left: -5px !important;
+    margin-right: -5px !important;
+  }
   .large-table {
     width: 90% !important;
     left: 20px;
@@ -253,7 +263,7 @@
   .hide-in-small {
     display: none;
   }
-  
+
   .hide-in-full {
     display: block;
     width: 90%;

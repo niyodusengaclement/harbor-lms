@@ -15,7 +15,6 @@ import {
   GET_COURSE_MEMBERS_ERROR,
   ACTION_START,
   GET_SINGLE_COURSE_SUCCESS,
-
 } from "./actionTypes";
 import actionCreator from "./actionCreator";
 import { toast } from "react-toastify";
@@ -26,23 +25,23 @@ export const createCourse = (newCourse) => {
     const firestore = getFirestore();
     dispatch(actionCreator(CREATE_COURSE_START));
     return firestore
-          .collection("courses")
-          .add(newCourse)
-          .then((doc)=>{
-              const res = newCourse;
-              res.id = doc.id;
-              toast.success('Course created successfully', {
-                position: "top-center",
-                hideProgressBar: true,
-              });
-              return dispatch(actionCreator(CREATE_COURSE_SUCCESS, res));
-          })
-          .catch((err) => {
-            toast.error(err, {
-              position: "top-center",
-              hideProgressBar: true,
-            });
-            return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
+      .collection("courses")
+      .add(newCourse)
+      .then((doc) => {
+        const res = newCourse;
+        res.id = doc.id;
+        toast.success("Course created successfully", {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        return dispatch(actionCreator(CREATE_COURSE_SUCCESS, res));
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
       });
   };
 };
@@ -55,14 +54,14 @@ export const getCourses = () => {
       dispatch(actionCreator(CREATE_COURSE_START));
       const courses = [];
       const courseRef = firestore.collection("courses");
-      const crs = await courseRef.where('instructorId', '==', uid).get();
-      if(crs.empty) {
+      const crs = await courseRef.where("instructorId", "==", uid).get();
+      if (crs.empty) {
         return dispatch(actionCreator(GET_COURSE_SUCCESS, []));
       }
       crs.forEach((doc) => {
-        const data = doc.data()
+        const data = doc.data();
         data.id = doc.id;
-        courses.push(data)
+        courses.push(data);
       });
       return dispatch(actionCreator(GET_COURSE_SUCCESS, courses));
     } catch (err) {
@@ -83,7 +82,7 @@ export const getSingleCourse = (id) => {
       const courseRef = firestore.collection("courses").doc(id);
       const crs = await courseRef.get();
       if (!crs.exists) {
-        toast.error('Course not found', {
+        toast.error("Course not found", {
           position: "top-center",
           hideProgressBar: true,
         });
@@ -100,26 +99,26 @@ export const getSingleCourse = (id) => {
   };
 };
 
-export const publishOrUnpublishCourses = (data) => {
+export const updateCourse = (data) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     const course = firestore.collection("courses").doc(data.id);
-    data.isPublished = !data.isPublished
-    return course.update(data)
-    .then((res)=>{
-      toast.success(`Course ${data.isPublished ? 'published' : 'unpublished'} successfully`, {
-        position: "top-center",
-        hideProgressBar: true,
+    return course
+      .update(data)
+      .then(() => {
+        toast.success(`Course updated successfully`, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        return dispatch(actionCreator(GET_COURSE_SUCCESS, course));
+      })
+      .catch((err) => {
+        toast.error(err, {
+          position: "top-center",
+          hideProgressBar: true,
+        });
+        return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
       });
-      return dispatch(actionCreator(GET_COURSE_SUCCESS, course));
-    })
-    .catch((err) => {
-      toast.error(err, {
-        position: "top-center",
-        hideProgressBar: true,
-      });
-      return dispatch(actionCreator(CREATE_COURSE_FAILURE, err));
-    });
   };
 };
 
@@ -127,19 +126,19 @@ export const createCourseSection = (
   courseId,
   section,
   setShow,
-  setIsLoading,
+  setIsLoading
 ) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     try {
       const firestore = getFirestore();
-      section.courseId = courseId;      
+      section.courseId = courseId;
       return firestore
-      .collection("sections")
-      .add(section)
-      .then((doc)=>{
+        .collection("sections")
+        .add(section)
+        .then((doc) => {
           const res = section;
           res.id = doc.id;
-          
+
           toast.success("Section created successfully", {
             position: "top-center",
             hideProgressBar: true,
@@ -147,14 +146,14 @@ export const createCourseSection = (
           setIsLoading(false);
           setShow(false);
           return dispatch(actionCreator(CREATE_COURSE_SECTION_SUCCESS, res));
-      })
-      .catch((err) => {
-        toast.error(err, {
-          position: "top-center",
-          hideProgressBar: true,
+        })
+        .catch((err) => {
+          toast.error(err, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+          return dispatch(actionCreator(CREATE_COURSE_SECTION_FAILURE, err));
         });
-        return dispatch(actionCreator(CREATE_COURSE_SECTION_FAILURE, err));
-      });
     } catch (error) {
       dispatch({
         type: CREATE_COURSE_SECTION_FAILURE,
@@ -170,9 +169,9 @@ export const getCourseSections = (courseId, setIsLoading) => {
       const firestore = getFirestore();
       const ref = firestore.collection("sections");
       let courseSections = [];
-      const snapshot = await ref.where('courseId', '==', courseId).get();
+      const snapshot = await ref.where("courseId", "==", courseId).get();
       snapshot.forEach((doc) => {
-        const data = doc.data()
+        const data = doc.data();
         data.id = doc.id;
         courseSections.push(data);
       });
@@ -220,7 +219,7 @@ export const updateCourseSection = (
   return async (dispatch, getState, { getFirestore, getFirebase }) => {
     try {
       const firestore = getFirestore();
-      const sectionDoc = await firestore.collection("sections").doc(sectionId);
+      const sectionDoc = firestore.collection("sections").doc(sectionId);
       await sectionDoc.update(updates);
       toast.success("Section updated successfully", {
         position: "top-center",
@@ -254,54 +253,60 @@ export const deleteCourseSection = (courseId, sectionId) => {
       });
       dispatch({
         type: DELETE_COURSE_SECTION_SUCCESS,
-        payload: 'section deleted with success',
+        payload: "section deleted with success",
       });
     } catch (error) {
       console.error("error : ", error);
-
     }
   };
 };
 
-export const addCourseMembers = (courseId, courseName, sectionName, arrayOfMembers) => {
+export const addCourseMembers = (
+  courseId,
+  courseName,
+  sectionName,
+  arrayOfMembers
+) => {
   return async (dispatch, getState, { getFirebase, getFirestore }) => {
     const firestore = getFirestore();
     arrayOfMembers.forEach(async (member) => {
       member.courseId = courseId;
       firestore
-      .collection("members")
-      .add(member)
-      .then( async (doc) => {
-        const { id, others } = member;
-        const data = {
-          ...others,
-          receiver: id,
-          docId: doc.id,
-          type: "Invitation",
-          message: `You are invited to enroll in ${courseName}, section ${sectionName}`,
-          status: "pending",
-          unread: true,
-          courseId,
-          time: new Date().setTime(new Date())
-        }
-        return await firestore
-        .collection("notifications")
-        .add(data)
-        .then((doc) => {
-          toast.success('Invitation sent successfully', {
-            position: 'top-center',
-            hideProgressBar: true,
-          })
-          return dispatch(actionCreator(UPDATE_COURSE_MEMBERS, arrayOfMembers));
+        .collection("members")
+        .add(member)
+        .then(async (doc) => {
+          const { id, others } = member;
+          const data = {
+            ...others,
+            receiver: id,
+            docId: doc.id,
+            type: "Invitation",
+            message: `You are invited to enroll in ${courseName}, section ${sectionName}`,
+            status: "pending",
+            unread: true,
+            courseId,
+            time: new Date().setTime(new Date()),
+          };
+          return await firestore
+            .collection("notifications")
+            .add(data)
+            .then((doc) => {
+              toast.success("Invitation sent successfully", {
+                position: "top-center",
+                hideProgressBar: true,
+              });
+              return dispatch(
+                actionCreator(UPDATE_COURSE_MEMBERS, arrayOfMembers)
+              );
+            });
         })
-      })
-      .catch((err) => {
-        toast.error(err, {
-          position: "top-center",
-          hideProgressBar: true,
+        .catch((err) => {
+          toast.error(err, {
+            position: "top-center",
+            hideProgressBar: true,
+          });
+          return dispatch(actionCreator(GET_COURSE_MEMBERS_ERROR, err));
         });
-        return dispatch(actionCreator(GET_COURSE_MEMBERS_ERROR, err));
-      });
     });
   };
 };
@@ -314,13 +319,13 @@ export const getAllMembers = () => {
       dispatch(actionCreator(CREATE_COURSE_START));
       const allMembers = [];
       const crs = await firestore.collection("members").get();
-      if(crs.empty) {
+      if (crs.empty) {
         return dispatch(actionCreator(GET_COURSE_MEMBERS, []));
       }
       crs.forEach((doc) => {
-        const data = doc.data()
+        const data = doc.data();
         data.id = doc.id;
-        allMembers.push(data)
+        allMembers.push(data);
       });
       return dispatch(actionCreator(GET_COURSE_MEMBERS, allMembers));
     } catch (err) {

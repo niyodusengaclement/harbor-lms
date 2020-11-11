@@ -13,7 +13,7 @@ import {
 import { Spinner } from "react-bootstrap";
 
 const ModalComponent = (props) => {
-  const { toggled, isDocEdit, isDropdown, } = props;
+  const { toggled, isDocEdit, isDropdown } = props;
   const [show, setShow] = useState(props.show);
   const [sectionName, setSectionName] = useState(props.sectionName || "");
   const [academicYear, setAcademicYear] = useState(props.academicYear || "");
@@ -34,7 +34,6 @@ const ModalComponent = (props) => {
     setAcademicYear("");
   };
   useEffect(() => {
-
     setShow(toggled);
   }, [props.toggled, props.sections]);
   const handleChange = (target) => {
@@ -46,67 +45,66 @@ const ModalComponent = (props) => {
     else if (target.name === "startingDate") setStartingDate(target.value);
     else if (target.name === "closingDate") setClosingDate(target.value);
   };
-  const handleClick = (target) => {
-    if (target.id === "save" || target.name === "save") {
-      setIsLoading(true);
-      if (
-        sectionName &&
-        academicYear &&
-        calendarSystem &&
-        semOrTrim &&
-        startingDate &&
-        closingDate
-      ) {
-        const isInEditMode = props.modalTitle === "Edit section";
-        if (isInEditMode) {
-          const updatedSection = {
-            sectionName,
-            academicYear,
-            calendarSystem,
-            semOrTrim,
-            startingDate,
-            closingDate,
-          };
-          props.updateCourseSection(
-            localStorage.getItem("courseId"),
-            props.sectionUid,
-            updatedSection,
-            setShow,
-            setIsLoading
-          );
-        } else {
-          const startingYear = new Date(startingDate).getFullYear();
-          const closingYear = new Date(closingDate).getFullYear();
-          const sectionId = generateSectionId(
-            calendarSystem,
-            semOrTrim,
-            startingYear,
-            closingYear
-          );
-          const sectionInfo = {
-            sectionName,
-            academicYear,
-            calendarSystem,
-            semOrTrim,
-            startingDate,
-            closingDate,
-            sectionId,
-          };
-          sectionInfo.members = 0;
-          props.createCourseSection(
-            localStorage.getItem("courseId"),
-            sectionInfo,
-            setShow,
-            setIsLoading
-          );
-        }
+  const handleClick = () => {
+    setIsLoading(true);
+    if (
+      sectionName &&
+      academicYear &&
+      calendarSystem &&
+      semOrTrim &&
+      startingDate &&
+      closingDate
+    ) {
+      const isInEditMode = props.modalTitle === "Edit section";
+      if (isInEditMode) {
+        const updatedSection = {
+          sectionName,
+          academicYear,
+          calendarSystem,
+          semOrTrim,
+          startingDate,
+          closingDate,
+        };
+        props.updateCourseSection(
+          localStorage.getItem("courseId"),
+          props.sectionUid,
+          updatedSection,
+          setShow,
+          setIsLoading
+        );
       } else {
-        toast.error("Please fill in all fields", {
-          position: "top-center",
-          hideProgressBar: true,
-        });
-        setIsLoading(false);
+        const startingYear = new Date(startingDate).getFullYear();
+        const closingYear = new Date(closingDate).getFullYear();
+        const sectionId = generateSectionId(
+          calendarSystem,
+          semOrTrim,
+          startingYear,
+          closingYear
+        );
+        const sectionInfo = {
+          sectionName,
+          academicYear,
+          calendarSystem,
+          semOrTrim,
+          startingDate,
+          closingDate,
+          sectionId,
+        };
+        sectionInfo.members = 0;
+        props.createCourseSection(
+          localStorage.getItem("courseId"),
+          sectionInfo,
+          setShow,
+          setIsLoading
+        );
+        clearFields();
       }
+    } else {
+      toast.error("Please fill in all fields", {
+        position: "top-center",
+        hideProgressBar: true,
+      });
+      setIsLoading(false);
     }
   };
   return (
